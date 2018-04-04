@@ -23,6 +23,7 @@ used for implementing IIR filters.
 	$v[0]=
 	\begin{bmatrix}
 	0 \\
+	0 \\
 	1
 	\end{bmatrix}$
 

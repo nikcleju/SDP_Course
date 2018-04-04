@@ -35,11 +35,7 @@ the fixed point format 1S0Î4F via:
     
     The negative values shall be represented in C2 format.
     
-1. Perform the following operations in the binary fixed point format 
-1S0Î3F. All the intermediate / final values shall be rounded to the
-format.
-    a. 0.3125 - 0.75 + 0.625
-    
+   
 3. Use Matlab's `fdatool` to design a low-pass IIR filter, 
 Butterworth type, order 4, with cutoff frequency of 4kHz for a 
 sampling frequency of 44.1kHz. Export the coefficients of the direct 
@@ -47,7 +43,7 @@ form II implementation to the Matlab Workspace as `b` and `a`.
 
 4. In Matlab's `fdatool`, set the filter arithmetic to 
 "fixed-point arithmetic" and modify the following:
-    a. Set the format to fixed point 1S1Î3F. 
+    a. Set the format to fixed point 1S2I7F. 
     How does the filter's transfer function change? 
     b. Increase the number of bits in the fractionary part.
     How does the filter's transfer function change? 
@@ -63,8 +59,13 @@ Export the coefficients to Matlab's Workspace as `b2` and `a2`.
 
 5. Load the `mtlb` audio signal from Matlab.
 Use `filter()` to filter the signal with the original filter 
-(`b` and `a`) and with the fixed point coefficients (`b1` and `a2`). 
-Plot the difference between the two filtered signals.
+(`b` and `a`) and with the fixed point coefficients (`b1` and `a1`). 
+    a. Plot the difference between the two filtered signals.
+    b. Plot the histogram of the difference signal. What is it's shape? 
+    What is the average value of the errors?
+
+
+
 
 
 # Final questions
