@@ -26,7 +26,9 @@ output signal of a digital filter.
 	b. Computations with fixed-point 1S0I4F format, quantize by truncation
 	c. Computations with fixed-point 1S0I4F format, quantize by rounding
     
-1. In Matlab, load the signal `mtlb` and quantize it on $N=8$ bits.
+1. In Matlab, write a script file to study the quantization of 
+the `mtlb` signal on $N=8$ bits.
+    a. Load the predefined `mtlb` signal (use `load mtlb`);
     a. Figure out if a sign bit is needed or not;
 	b. Find the maximum absolute value of the signal, and figure out 
 	the number of bits required for the integer part. 
@@ -34,8 +36,8 @@ output signal of a digital filter.
 	c. Use the function `fixdt()` to create the corresponding fixed-point data type;
 	d. Use the function `num2fixpt` to convert the signal `mtlb` to the
 	fixed-point data type, using all the three quantization methods;
-	e. For all the three quantization methods, visualize the quantization error,
-	compute the average value and the variance of the error. 
+	e. For all the three quantization methods, visualize the quantized signal,
+	the quantization error, and compute the total energy of the quantization errors. 
 	Which quantization error produces minimum errors?
 	f. Play the quantized signal. Can you hear the difference from the
 	original signal?
