@@ -19,8 +19,8 @@ events on the output of a digital filter.
 
     a. Draw the direct form II implementation and one of the 
     series implementations
-	b. Assume a fixed-point implementation on $b$ bits.
-	Each product is quantized by rounding to $b$ bits.
+	b. Assume a fixed-point implementation with $b$ bits for the fractionary part.
+	Each product is quantized by rounding to this format.
 	Find the variance of the rounding noise due to the 
 	internal multiplications, at the output of each implementation
 	from a.
