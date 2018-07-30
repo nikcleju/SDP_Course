@@ -5,6 +5,8 @@ documentclass: scrartcl
 fontsize: 12pt
 ---
 
+\newcommand*{\underuparrow}[1]{\ensuremath{\underset{\uparrow}{#1}}} 
+
 # Objective
 
 Using the Prony method for designing IIR filters of various types
@@ -13,6 +15,11 @@ Using the Prony method for designing IIR filters of various types
 
 
 # Exercises
+
+1. Design with the Prony method an IIR filter of order 2 which approximates the 
+following desired impulse response:
+$$h_d[n] = \{...0,\underuparrow{1},2,3,2,1,2,3\}$$
+    (the origin of time $n=0$ is at the first value of 1 in the sequence).
 
 1. Implement in Matlab a function for creating and then solving the equation system
 resulting from the **Prony method**:
