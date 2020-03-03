@@ -13,12 +13,51 @@ Using the Prony method for designing IIR filters of various types
 
 # Theoretical notions
 
+The Prony method has the same purpose as the Pade method: to design a 
+system function $H(z)$ of a specified order $n$:
+
+$$H(z) = \frac{b_0 + b_1 z^{-1} + b_2 z^{-2} + ... + b_N z^{-M}}{1 + a_1 z^{-1} + a_2 z^{-2} + ... + a_N z^{-N}}$$
+
+such that the impulse response $h[n]$ is approximately equal to
+the desired impulse response $h_d[n]$:
+
+$$h[n] \approx h_d[n]$$
+
+The difference is from the Pade method is in **how** this is done.
+
+The Prony method operates as follows:
+
+1. The denominator coefficients $a_k$ are found by minimizing the **energy of the difference** signal between
+$h[n]$ and $h_d[n]$:
+  $$E = \sum_{n=-\infty}^{\infty} \left( h[n] - h_d[n] \right)^2$$
+  Replacing $h[n]$ with the same formula used in the Pade method leads to an equation system using the autocorrelation function:
+  $$to \;\;\; draw \;\;\; at \;\;\; whiteboard$$
+  The **autocorrelation function** of $h_d[n]$,  $\Gamma_{hh}[k]$, is defined as:
+  $$\Gamma_{hh}[k] = \sum_{n=-\infty}^{\infty} h_d[n] \cdot h_d[n+k]$$
+
+  2. Once $a_k$ are known, the numerator coefficients $b_k$ are found just like in the
+Pade method, from the same equations, in the same way.
+  
+  Note: Because the $b_k$ coefficients, found like in the Pade method, will make the
+first $M$ coefficients of $h[n]$ equal to those of $h_d[n]$ (just like Pade),
+when computing the autocorrelation function $\Gamma_{hh}[k]$ 
+we can consider only the part of $h_d[n]$ which starts after the first $M$ samples.
+That's because we don't need to worry about the first $M$ samples, they
+will be equal anyway.
+
+## Shank's method
+
+An improved method would be to find the coefficients $b_k$ not from the
+Pade equations (suboptimal), but from another energy optimization problem
+similar to the one used for finding $a_k$.
+
+This method, known as **Shank's method**, is implemented in Matlab as `prony()`
 
 # Exercises
 
 1. Design with the Prony method an IIR filter of order 2 which approximates the 
 following desired impulse response:
-$$h_d[n] = \{...0,\underuparrow{1},2,3,2,1,2,3\}$$
+$$h_d[n] = \{...0,\underuparrow{1},2,3,2,1,2,3, 0,...\}$$
     (the origin of time $n=0$ is at the first value of 1 in the sequence).
 
 1. Implement in Matlab a function for creating and then solving the equation system
