@@ -12,6 +12,51 @@ for digital filters and implement them in the Simulink environment.
 
 # Theoretical notions
 
+The direct implementation forms are presented below:
+
+## Direct Forms 
+
+![Direct form I](img/DF1.png){width=50%}
+
+![Direct form II](img/DF2.png){width=50%}
+
+![Direct form I - Transposed](img/DF1T.png){width=50%}
+
+![Direct form II - Transposed](img/DF2T.png){width=50%}
+
+All the Direct Form images are from "Introduction to Digital Filters with Audio Applications", Julius O. Smith III, available here:
+[https://www.dsprelated.com/freebooks/filters/](https://www.dsprelated.com/freebooks/filters/)
+
+## Series form
+
+In series form, the system function is decomposed as a product of smaller functions, typically of order 2:
+$$H(z) = H_1(z) \cdot H_2(z) \cdot ... \cdot H_n(z)$$
+
+The system is implemented from the smaller systems $H_1(z), H_2(z) ... H_n(z)$ arranged **in series**.
+Each individual subsystem can be implemented as desired.
+
+Example:
+
+![Example of series form implementation](img/SeriesForm.gif){width=75%}
+
+Image is from "DSP blockset manual", Mathworks, available here:
+[http://matrix.etseq.urv.es/manuals/matlab/toolbox/dspblks/biquadraticfilter.html](http://matrix.etseq.urv.es/manuals/matlab/toolbox/dspblks/biquadraticfilter.html)
+
+
+## Parallel form
+
+In parallel form, the system function is decomposed as a sum of smaller functions:
+$$H(z) = H_1(z) + H_2(z) + ... + H_n(z)$$
+
+The system is implemented from the smaller systems $H_1(z), H_2(z) ... H_n(z)$ arranged **in parallel**.
+
+Example:
+
+![Example of series form implementation](img/ParallelForm.gif){width=50%}
+
+Image is from "DIntroduction to DSP", BORES Signal Processing, available here:
+[http://www.bores.com/courses/intro/iir/5_para.htm](http://www.bores.com/courses/intro/iir/5_para.htm)
+
 
 # Exercises
 
@@ -21,6 +66,7 @@ draw the realization structure in the following forms:
 
     a. direct form I
     b. direct form II
+    b. direct form I transposed
     c. direct form II transposed
 
 2. For the digital filter with system function 
