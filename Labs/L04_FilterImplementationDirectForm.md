@@ -52,9 +52,9 @@ The system is implemented from the smaller systems $H_1(z), H_2(z) ... H_n(z)$ a
 
 Example:
 
-![Example of series form implementation](img/ParallelForm.gif){width=50%}
+![Example of parallel form implementation](img/ParallelForm.gif){width=50%}
 
-Image is from "DIntroduction to DSP", BORES Signal Processing, available here:
+Image is from "Introduction to DSP", BORES Signal Processing, available here:
 [http://www.bores.com/courses/intro/iir/5_para.htm](http://www.bores.com/courses/intro/iir/5_para.htm)
 
 
