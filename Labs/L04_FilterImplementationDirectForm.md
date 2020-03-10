@@ -86,6 +86,8 @@ draw the realization structure in the parallel form.
 1. In the Simulink environment, implement the above filters in direct form II. Apply at the input an audio signal and play the output signal, as well as the original, for comparison.
 How does the filtered signal sound like, compared to the original?
 
+1. In the Simulink environment, change one of the previous implementations to a series form (Second-Order-Sections).
+
 
 # Notes:
 
