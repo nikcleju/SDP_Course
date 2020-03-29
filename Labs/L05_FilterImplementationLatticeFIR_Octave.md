@@ -23,7 +23,7 @@ $K_1 = \frac{1}{2}$, $K_2 = 0.6$, $K_3 = -0,7$, $K_4 = \frac{1}{3}$.
 $$H(z) = 1 + \frac{2}{5}z^{-1} + \frac{7}{20}z^{-2} + \frac{1}{2}z^{-3}$$
 
 
-3. Using the Octave software, use the `fir1()` function to design one of the following FIR filters:
+3. Using the Octave software, use the `fir1()` function to design one of the following elliptic FIR filters:
     
     a. A low-pass FIR filter of order 4, with cutoff frequency of 5kHz at a sampling frequency of 44.1kHz;
     a. A high-pass FIR filter of order 4, with cutoff frequency of 2kHz at a sampling frequency of 44.1kHz;
