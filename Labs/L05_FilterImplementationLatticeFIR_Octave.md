@@ -31,7 +31,7 @@ $$H(z) = 1 + \frac{2}{5}z^{-1} + \frac{7}{20}z^{-2} + \frac{1}{2}z^{-3}$$
     
     Read the documentation of the `fir1()` function to find out how to use it.
 
-4. Create an Octave function to `tf2latc()` to compute the coefficients of the lattice form of a FIR filter, 
+4. **Not needed; function given**. Create an Octave function to `tf2latc()` to compute the coefficients of the lattice form of a FIR filter, 
 starting from the coefficients of the Transfer Function. Call it like this: `K = tf2lact(coef)`
 
 4. Create an Octave script to filter an input signal `x` with a FIR filter in lattice form, for which the reflection coefficients `K` are known:

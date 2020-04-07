@@ -58,8 +58,14 @@ used for implementing IIR filters.
 	c. Draw the the type I and type II state-space implementations of this system, as well as the direct form II implementation
 
 	
-1. Using the Octave software, use the `ellip()` function to design a stopband filter of order 4, elliptic type, 
-with stop band between 1kHz and 3kHz, at a sampling frequency of 8kHz. Name the coefficient vectors `b` and `a`.
+1. Using the Octave software, use the `ellip()` function to design one of the following filters:
+
+    a. A low-pass IIR filter of order 4, with cutoff frequency of 6kHz at a sampling frequency of 8kHz;
+    a. A high-pass IIR filter of order 4, with cutoff frequency of 2.5kHz at a sampling frequency of 8kHz;
+    a. A band-pass IIR filter of order 4, with passband between 0.5kHz and 5.5kHz at a sampling frequency of 8kHz;
+    a. A stop-band IIR filter of order 4, with stop band between 1kHz and 3kHz, at a sampling frequency of 8kHz. 
+    
+    Name the coefficient vectors `b` and `a`.
 	
 4. In Octave, implement a function `filter_stsp(b, a, x)` which filters a signal `x` with
 the filter defined by the coefficients `b` and `a`. Implementation shall follow the type I state-space equations in matrix form.
