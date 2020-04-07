@@ -49,7 +49,7 @@ starting from the coefficients of the Transfer Function.
 5. Use the function above to load and low-pass the audio signal `Kalimba.mp3`.
 
     a) Load the file using `audioread()`
-    c) Filter the signal using `filter_latc_iir()`, with the previously designed filter
+    b) Filter the signal using `filter_latc_iir()`, with the previously designed filter
 
 
 
