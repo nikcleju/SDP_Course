@@ -37,9 +37,9 @@ the fixed point format 1S0Î4F via:
     
 1. Using the Octave software, use the `cheby1()` function to design one of the following Chebyshev type I filters:
 
-    a. A low-pass IIR filter of order 7, with cutoff frequency of 6kHz at a sampling frequency of 8kHz;
+    a. A low-pass IIR filter of order 7, with cutoff frequency of 1kHz at a sampling frequency of 8kHz;
     a. A high-pass IIR filter of order 7, with cutoff frequency of 2.5kHz at a sampling frequency of 8kHz;
-    a. A band-pass IIR filter of order 7, with passband between 0.5kHz and 5.5kHz at a sampling frequency of 8kHz;
+    a. A band-pass IIR filter of order 7, with passband between 0.5kHz and 3.5kHz at a sampling frequency of 8kHz;
     a. A stop-band IIR filter of order 7, with stop band between 1kHz and 3kHz, at a sampling frequency of 8kHz. 
     
 2. Use the quantization function `cuant()` provided in the lab data files to quantize the coefficients of the filter,
