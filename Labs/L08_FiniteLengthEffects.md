@@ -1,7 +1,7 @@
 ---
 title: Effects of finite word length representation
  of the filter coefficients
-subtitle: Lab, SDP
+subtitle: Lab 8, SDP
 documentclass: scrartcl
 fontsize: 12pt
 ---
