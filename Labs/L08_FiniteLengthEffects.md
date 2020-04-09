@@ -28,8 +28,8 @@ coefficients in a digital filter, and be able to mitigate the effects.
 6 fractionary bits - 1S6I6F the following negative numbers.
 Negative numbers shall be represented in sign-value, 1's complement (C1)
 and 2's complement (C2) formats.
-    a. -273
-    b. -273.21875
+    a. -22
+    b. -22.21875
     
 1. Quantize the samples $x_1 = 0.42625$ and $x_2 = -0.4333$ 
 the fixed point format 1S0I4F via:
