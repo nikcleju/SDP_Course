@@ -58,9 +58,8 @@ and display the transfer function with `freqz()` in three scenarios:
   
 3. Display the poles and zeros of in each of the three cases above, using `zplane()`
   
-3. Evaluate the effect of quantization considering the **parallel implementation** of the filter:
-    - Compute the coefficients for the parallel implementation using the function `rpfd()` provided in the lab files
-    - Use the provided function `qfr()` to compute the frequency response with quantized coefficients, in parallel implementation.
+3. Evaluate the effect of quantization considering the **parallel implementation** and the **series implementation** of the filter:
+    - Use the provided function `qfr()` to compute the frequency response with quantized coefficients, in parallel / series implementation.
       Read inside the function `qfr()` to see how the input and output arguments.
     - Plot the transfer functions in three cases:
         - coefficients not quantized (maximum precision)
@@ -69,14 +68,6 @@ and display the transfer function with `freqz()` in three scenarios:
       
     - Also display the pole-zero plot in each case, using `zplane()`
       
-    **Note:** The function `rpfd()` is used as `[c,nsec,dsec] = rpfd(b,a)` and provides the parallel implementation coefficients as follows:
-      - `c` = the coefficients of the quotient polynomial
-      - `nsec` = the numerator coefficients of all the subsections, in each line
-      - `dsec` = the denominator coefficients of all the subsections, in each line
-
-
-4. Similar to the above exercise, evaluate the effect of quantization considering the **series implementation** of the filter, which is obtained with the function `tf2sos()`.
-
 5. Which is the implementation which is most robust to quantization?
 
 
