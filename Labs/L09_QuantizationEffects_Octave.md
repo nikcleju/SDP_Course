@@ -26,8 +26,8 @@ output signal of a digital filter.
 	b. Computations with fixed-point 1S0I4F format, quantize by truncation
 	c. Computations with fixed-point 1S0I4F format, quantize by rounding
     
-1. In Matlab, write a script file to study the quantization of 
-an audio signal `mtlb` signal on a fixed point binary format with $N=8$ bits.
+1. In Octave, write a script file to study the quantization of 
+an audio signal on a fixed point binary format with $N=8$ bits.
     a. Load the audio signal `Sample.wav ` and keep only 3 seconds of the audio signal. Name this vector `x`.
     a. Plot the signal, and figure out if a sign bit is needed or not in the binary format
 	b. Find the maximum absolute value of the signal, and figure out 
