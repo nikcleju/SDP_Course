@@ -17,13 +17,11 @@ events on the output of a digital filter.
 1. Consider the following system:
 	$$H(z) = \frac{1-\frac{1}{2}z^{-1}}{\left(1 - \frac{1}{4}z^{-1}\right)\left(1 + \frac{1}{4}z^{-1}\right)}$$
 
-    a. Draw the direct form II implementation and one of the 
-    series implementations
+    a. Draw one of the series implementations of the system
 	b. Assume a fixed-point implementation with $b$ bits for the fractionary part.
 	Each product is quantized by rounding to this format.
 	Find the variance of the rounding noise due to the 
-	internal multiplications, at the output of each implementation
-	from a.
+	internal multiplications, at the output of the system.
 
 2. In Matlab, use the `fdatool` tool to design a high-pass IIR filter
 of order 4, Butterworth type, with cutoff frequency equal to 1.5kHz for
