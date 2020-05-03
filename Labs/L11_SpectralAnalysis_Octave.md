@@ -32,7 +32,7 @@ the following difference equation:
 3. In Octave, estimate the spectrum of an audio file.
 	a. Load the signal `1st_String_E.ogg` with the function `audioread()`.
     b. Play and plot the sound file
-	c. Use the functions `periodogram()` to estimate the power spectral density (PSD) of the signal
+	c. Use the function `periodogram()` to estimate the power spectral density (PSD) of the signal
     d. Plot the PSD; the actual frequencies should be displayed on the X axis.
 	e. Identify the dominant frequency from the spectrum and display its value in Hz.
     f. Repeat for all the other string files provided.
@@ -40,7 +40,7 @@ the following difference equation:
 4. In Octave, create a script file which implements a live spectrum analyzer operating on the previous file.
     a. Load the signal `1st_String_E.ogg` with the function `audioread()`.
    	a. Use the function `buffer()` to split the signal into windows of length $L=100ms$.
-	c. Use the functions `pwelch()` and `periodogram()` to estimate	and plot, successively, the PSD of each window.
+	c. Use the function `periodogram()` to estimate	and plot, successively, the PSD of each window.
     d. Find the dominant frequency of each window and display it as the title of the image (title should be e.g. "Max freq = 200 Hz").
     e. Think of a wey of detecting silence in the sound, and make the image title "Silence" when this is detected
 
