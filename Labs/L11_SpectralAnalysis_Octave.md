@@ -50,4 +50,4 @@ the following difference equation:
 
 # Final questions
 
-1. How can we create an app to detect if a guitar is in tune or not?
+1. How can we create an app to help tune a guitar correctly?
