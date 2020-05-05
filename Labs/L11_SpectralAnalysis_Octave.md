@@ -24,7 +24,7 @@ the following difference equation:
 	
 2. The autocorrelation function of an AR random process $x[n]$ is:
 
-    $\gamma_{xx}[m] = \frac{1}{4}^m.$
+    $\gamma_{xx}[m] = \frac{1}{4}^{|m|}.$
 	
 	Find the difference equation of the random process $x[n]$. Is this unique? 
 	If not, find more than one possible solution.
