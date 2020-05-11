@@ -23,7 +23,7 @@ Students shall use linear prediction in a simple application on time-series pred
 	c. Find the variance $\sigma_{y}^2$ of the output signal.
 
 2. In Octave, load the data from file `COVID_World.csv` using the function `csvread()`. 
-It contains the daily number of new cases worldwide, starting from 17 January and going to 11 May.
+It contains the daily number of new cases worldwide, starting from 1 January and going to 11 May.
     a. Plot the data;
     b. Plot the cumulative sum of the data (total number of cases up to each day).
 
@@ -50,7 +50,7 @@ Try different prediction orders (e.g. 5, 10, 30).
 
 4. Repeat the estimation on the cumulative sum of the data.
 
-5. Generate a sinusoidal signal with frequency $f=0.03$, of length 3000 samples, with random noise of amplitude 0.1 added on top of it.
+5. Generate a sinusoidal signal with frequency $f=0.003$, of length 3000 samples, with random noise of amplitude 0.1 added on top of it.
 Estimate the Linear Prediction Coefficients and plot the prediction and the signal on the same figure. Which one has lower amounts of noise?
 
 
