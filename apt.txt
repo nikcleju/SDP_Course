@@ -1,6 +1,4 @@
-curl
 octave
-liboctave-dev
 octave-signal
 gnuplot
 ghostscript
