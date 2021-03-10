@@ -1,3 +1,16 @@
+---
+jupyter:
+  jupytext:
+    cell_metadata_filter: language,-all
+    formats: ipynb,md
+    main_language: matlab
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.10.3
+---
+
 # SDP Lab 03: IIR Filter Design with Prony method
 
 ## Usage
