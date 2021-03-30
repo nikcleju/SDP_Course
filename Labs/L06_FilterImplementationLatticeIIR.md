@@ -8,7 +8,7 @@ fontsize: 12pt
 # Objective
 
 The students should become familiar with *lattice*-type realization structure
-used for implementing IIR filters.cola
+used for implementing IIR filters.
 
 # Theoretical notions
 
@@ -34,6 +34,26 @@ $$H(z) = \frac{1}{ 1 + \frac{2}{5}z^{-1} + \frac{7}{20}z^{-2} + \frac{1}{2}z^{-3
 
 1. In the Simulink environment, implement the above filters in *lattice* form. Apply at the input an audio signal and play the output signal, as well as the original, for comparison.
 How does the filtered signal sound like, compared to the original?    
+
+
+1. Create an Octave function to filter an input signal `x` with an IIR filter in lattice form, given the coefficients $K$ and $V$:
+    
+    ```
+    y = filter_latc_iir(K, V, x)
+    ```
+    
+    Define variables `w1`, `w2`, ... to hold the values of the unit delays, and `w1_next`, ... to hold the future values.
+      - Compute the current output value based on `w1`, ... and the input
+      - Compute the next values `w1_next`, ... based on `w1`, ... and the input
+      - Update `w1`, ... with the values in `w1_next`, ... and iterate
+
+
+1. Use the function above to filter an audio file.
+
+    a) Load the file using `audioread()`
+    b) Filter the signal using `filter_latc_iir()`, with the previously designed filter
+
+
 
 
 # Notes:
