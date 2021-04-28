@@ -23,7 +23,7 @@ events on the output of a digital filter.
 	Find the variance of the rounding noise due to the 
 	internal multiplications, at the output of the system.
 
-2. In Matlab, use the `fdatool` tool to design a high-pass IIR filter
+2. In Matlab, use the `fdatool` tool to design a low-pass IIR filter
 of order 4, Butterworth type, with cutoff frequency equal to 1.5kHz for
 a sampling frequency of 44.1kHz. Convert the filter to direct form II
 and export it to Simulink (check the option *Build model using basic elements*).
