@@ -31,7 +31,7 @@ the following difference equation:
 
 3. In Matlab, create a signal of length $N=1000$ defined as follows:
 	
-	$x[n] = \cos(2 \cdot \pi \cdot f_1) + 0.5 * \cos(2 \cdot \pi \cdot f_2) + A \cdot noise$
+	$x[n] = \cos(2 \cdot \pi \cdot f_1 \cdot n) + 0.5 \cdot \cos(2 \cdot \pi \cdot f_2 \cdot n) + A \cdot noise$
 	
 	where $f_1 = 1 / 44100$ and $f_2 = 1.8 / 44100$, and the noise is random white gaussian noise (`randn()`).
 	
@@ -40,8 +40,9 @@ the following difference equation:
 4. Estimate the power spectral density of the signal `x`:
     1. Compute the Fourier transform $X(f)$ (with `fft()`), and display $|X(f)|^2$
 	2. Use the function `periodogram()`
-	3. Use the function `periodogram()` function with a `window` parameter set to a rectangular window of length 250
-	(`ones(250)`). Also try length 500, 100, 50. What is the difference?
+	3. Split the signal in semnalul in 2, 4, or 10 segments of equal lengths,
+	   compute the periodogram of each one, and then average them.
+	   What are the differences?
 	4. Use the Yule Walker method (`pyulear`).
 	
 	Pay attention to:
@@ -54,7 +55,7 @@ the following difference equation:
 	a. Load the signal `music.wav` with the function `audioread()`.
 	b. Use the function `buffer()` to split the signal into windows 
 	of length 30ms.
-	c. Use the methods at exercise 4 to estimate
+	c. Use `periodogram()` to estimate
 	and plot, successively,the spectrum of each window signal.
 	d. Optional: localize and plot the dominant frequency from the spectrum of each window.
 	Convert the frequency to the corresponding musical note and output it.
