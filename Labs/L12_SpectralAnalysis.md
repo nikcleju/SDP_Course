@@ -31,9 +31,9 @@ the following difference equation:
 
 3. In Matlab, create a signal of length $N=1000$ defined as follows:
 	
-	$x[n] = \cos(2 \cdot \pi \cdot f_1 \cdot n) + 0.5 \cdot \cos(2 \cdot \pi \cdot f_2 \cdot n) + A \cdot noise$
+	$x[n] = \cos(2 \pi f_1 n) + 0.5 \cdot \cos(2 \pi f_2 n) + A \cdot noise$
 	
-	where $f_1 = 1 / 44100$ and $f_2 = 1.8 / 44100$, and the noise is random white gaussian noise (`randn()`).
+	where $f_1 = 1000 / 44100$ and $f_2 = 1800 / 44100$, and the noise is random white gaussian noise (`randn()`).
 	
 	Try different values of A (e.g. 0.1, 0.3).
 	
