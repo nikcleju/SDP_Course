@@ -37,13 +37,10 @@ the following difference equation:
 	
 	Try different values of A (e.g. 0.1, 0.3).
 	
-4. Estimate the power spectral density of the signal `x`:
+4. Estimate the power spectral density of the signal `x` in three diferent ways:
     1. Compute the Fourier transform $X(f)$ (with `fft()`), and display $|X(f)|^2$
 	2. Use the function `periodogram()`
-	3. Split the signal in semnalul in 2, 4, or 10 segments of equal lengths,
-	   compute the periodogram of each one, and then average them.
-	   What are the differences?
-	4. Use the Yule Walker method (`pyulear`).
+	3. Use the Yule Walker method (`pyulear`), with order 30 (try different values, from e.g. 5 to about 70).
 	
 	Pay attention to:
 	  - are the frequency peaks correctly located at $f_1$ and $f_2$?
