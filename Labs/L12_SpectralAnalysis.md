@@ -1,6 +1,6 @@
 ---
 title: Spectral estimation methods
-subtitle: Lab 11, SDP
+subtitle: Lab 12, SDP
 documentclass: scrartcl
 fontsize: 12pt
 ---
@@ -47,7 +47,16 @@ the following difference equation:
 	  - are the frequency peaks wide or narrow?
 	  - is the noise spectrum flat or not?
 
-5. In Matlab, create a script file which implements a live spectrum analyzer.
+5. Check if my guitar is in tune or not:
+    a. Load the signal `1st_String_E.ogg` with the function `audioread()`, and display its spectrum
+	   Use `[pxx, f] = periodogram(x, [], [], Fs)` to obtain both the spectrum and the frequency values,
+	   and plot `pxx` against `f`.
+	b. Identify the fundamental frequency
+	c. Compare the value with the frequency values of a standard guitar tuning (see Wikipedia page
+	   on Guitar Tunings)
+	d. Repeat for all other strings
+
+6. In Matlab, create a script file which implements a live spectrum analyzer.
     
 	a. Load the signal `music.wav` with the function `audioread()`.
 	b. Use the function `buffer()` to split the signal into windows 
