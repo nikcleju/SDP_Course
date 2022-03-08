@@ -17,7 +17,7 @@ Using the Pade method for designing IIR filters of various types
 1. Use the Pade method to find out the parameters of the system with the following system function
 $$H(z) = \frac{b_0 + b_1 z^{-1} + b_2 z^{-2}}{1 + a_1 z^{-1} + a_2 z^{-2}},$$
     considering the desired impulse response to be: 
-$$h_d[n] = \left(\frac{1}{3}\right)^n \cos\left(\frac{n \pi}{4}\right).$$
+$$h_d[n] = \left(\frac{1}{3}\right)^n \cos\left(n \pi\right) u[n] + u[n-3]$$
 
 1. Use Matlab to solve numerically the Pade system for the previous exercise:
 $$
