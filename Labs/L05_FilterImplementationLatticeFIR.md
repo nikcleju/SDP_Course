@@ -12,6 +12,21 @@ used for implementing FIR filters.
 
 # Theoretical notions
 
+Lattice form for an FIR filter of order 3:
+
+![Lattice form, order 3](img/LatticeFIR_handdraw.png)
+
+Equations:
+
+$$\begin{aligned}
+A_0(z) &= B_0(z) = 1 \\
+A_m(z) &= A_{m-1}(z) + K_m \cdot z^{-1} \cdot B_{m-1}(z) \\
+A_{m-1}(z) &= \frac{A_m(z) - K_m  \cdot B_m(z)}{1 - K_m^2} \\
+B_m(z) &= z^{-m} B_m(z^{-1}) = \textrm{ like }A_m(z)\textrm{, with coefficients reversed}
+\end{aligned}$$
+
+These equations allow to convert $H(z)$ to the reflection coefficients needed by the lattice implementation,
+or to find $H(z)$ from a given lattice implementation.
 
 # Exercises
 
