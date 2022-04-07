@@ -39,9 +39,9 @@ $$H(z) = 1 + \frac{2}{5}z^{-1} + \frac{7}{20}z^{-2} + \frac{1}{2}z^{-3}$$
 
 1. In the Matlab environment, use the `fdatool` tool to design one of the following filters:
     
-    a. A low-pass IIR filter of order 4, elliptic type, with cutoff frequency of 5kHz at a sampling frequency of 44.1kHz;
-    a. A high-pass IIR filter of order 4, elliptic type, with cutoff frequency of 2kHz at a sampling frequency of 44.1kHz;
-    a. A band-pass IIR filter of order 4, elliptic type, with passband between 1kHz and 3kHz at a sampling frequency of 44.1kHz.
+    a. A low-pass FIR filter of order 5, equiripple type, with cutoff frequency of 5kHz at a sampling frequency of 44.1kHz;
+    a. A high-pass FIR filter of order 5, equiripple type, with cutoff frequency of 2kHz at a sampling frequency of 44.1kHz;
+    a. A band-pass FIR filter of order 5, equiripple type, with passband between 1kHz and 3kHz at a sampling frequency of 44.1kHz.
 
 1. In the Simulink environment, implement the above filters in *lattice* form. Apply at the input an audio signal and play the output signal, as well as the original, for comparison.
 How does the filtered signal sound like, compared to the original?    
@@ -49,7 +49,7 @@ How does the filtered signal sound like, compared to the original?
 
 # Notes:
 
-- Set the following parameters for the SImulink model, to enable a discrete simulation with fixed (auto) step:
+- Set the following parameters for the Simulink model, to enable a discrete simulation with fixed (auto) step:
     - Type: *Fixed-step*
     - Solver: *discrete (no continuous states)*
     
