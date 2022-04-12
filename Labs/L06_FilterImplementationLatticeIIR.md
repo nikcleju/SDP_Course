@@ -12,6 +12,29 @@ used for implementing IIR filters.
 
 # Theoretical notions
 
+The *lattice-ladder* implementation form of an IIR filter of order 3 is below:
+
+![Lattice-ladder form, IIR order 3](img/LatticeIIR_handdraw.png)
+
+Equations:
+
+$$\begin{aligned}
+H(z) &= \frac{C(z)}{A(z)}
+\end{aligned}$$
+
+The reflection coefficients $K_i$ are found just like for FIR systems (previous lab.):
+$$\begin{aligned}
+A_0(z) &= B_0(z) = 1 \\
+A_m(z) &= A_{m-1}(z) + K_m \cdot z^{-1} \cdot B_{m-1}(z) \\
+A_{m-1}(z) &= \frac{A_m(z) - K_m  \cdot B_m(z)}{1 - K_m^2} \\
+B_m(z) &= z^{-m} B_m(z^{-1}) = \textrm{ like }A_m(z)\textrm{, with coefficients reversed}
+\end{aligned}$$
+
+Additionally, for the $\nu_i$ coefficients we use a similar equation:
+$$\begin{aligned}
+C_{m-1}(z) &= C_m(z) - \nu_m  \cdot B_m(z)
+\end{aligned}$$
+
 
 # Exercises
 
@@ -32,28 +55,16 @@ $$H(z) = \frac{1}{ 1 + \frac{2}{5}z^{-1} + \frac{7}{20}z^{-2} + \frac{1}{2}z^{-3
     a. A high-pass IIR filter of order 4, elliptic type, with cutoff frequency of 2.5kHz at a sampling frequency of 44.1kHz;
     a. A band-pass IIR filter of order 4, elliptic type, with passband between 0.5kHz and 5.5kHz at a sampling frequency of 44.1kHz.
 
-1. In the Simulink environment, implement the above filters in *lattice* form. Apply at the input an audio signal and play the output signal, as well as the original, for comparison.
+4. Export the coefficients to Matlab and convert them to the *lattice* form using `tf2latc()`
+
+
+1. In Simulink, implement the above filters in *lattice* form. 
+Apply at the input an audio signal and show and listen to the output signal, as well as the to original.
 How does the filtered signal sound like, compared to the original?    
 
-
-1. Create an Octave function to filter an input signal `x` with an IIR filter in lattice form, given the coefficients $K$ and $V$:
-    
-    ```
-    y = filter_latc_iir(K, V, x)
-    ```
-    
-    Define variables `w1`, `w2`, ... to hold the values of the unit delays, and `w1_next`, ... to hold the future values.
-      - Compute the current output value based on `w1`, ... and the input
-      - Compute the next values `w1_next`, ... based on `w1`, ... and the input
-      - Update `w1`, ... with the values in `w1_next`, ... and iterate
-
-
-1. Use the function above to filter an audio file.
-
-    a) Load the file using `audioread()`
-    b) Filter the signal using `filter_latc_iir()`, with the previously designed filter
-
-
+5. In Simulink, apply a video file to the input (select a video file in the `From Multimedia File` block). 
+Replace the audio output blocks with a `Video Viewer` block.
+How does the filtered signal look like?
 
 
 # Notes:
@@ -65,7 +76,7 @@ How does the filtered signal sound like, compared to the original?
 ![Model settings for discrete models](img/Simulink_Settings_Model.png)
 
 - You will need the blocks *Unit Delay*, *Sum* and *Gain*
-- At the input put a *From Multimedia File* block, and at the output put a *To Audio Device* block
+- At the input put a *From Multimedia File* block, and at the output put a  *Buffer* followed by *Audio Device Writer* block
 - At the output, before the *To Audio Device* block, put a *Manual Switch* block in order to be able to switch easily
 between the original signal and the filtered one
 - For the *From Multimedia File* block, select an audio file (de ex. Kalimba.mp3 from My Documents)
