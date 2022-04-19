@@ -68,6 +68,24 @@ the filter defined by the coefficients `b` and `a`. Implementation shall follow 
 5. Test the function written above with the coefficients designed at step 3, by filtering a sample audio signal.
 
 
+6. Modify the function to perform temporal filtering of a video sequence, only for a filter of order 3.
+   Test the function on the video sequence `veh_small.mp4`.
+
+   To read frames from a video sequence in Matlab, you can use the following snippet:
+
+   ```  
+   v = VideoReader('videofile.mp4');
+
+   % Read all the frames from the video, one frame at a time.
+
+   while hasFrame(v)
+    frame = readFrame(v);
+	
+	% Do the processing here
+	
+   end
+   ```
+
 # Final questions
 
 1. TBD
