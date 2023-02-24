@@ -1,19 +1,19 @@
 ---
 title: Designing IIR filters with the Pade method
 subtitle: Laboratory 2, SDP
-format:
-   html: default
-   pdf: default
-   ipynb: default
+format: 
+  html: default
+  pdf: default
+  ipynb: default
 
-heel: true
+toc: true
 number-depth: 2
 number-sections: true
 
 jupyter: python3
-run:
-   freeze: true
-   eval: false
+execute:
+  freeze: true
+  eval: false
 ---
 
 
@@ -162,7 +162,7 @@ h = impz(b, a, n);
      $$
 
 
-2. Implement in Matlab a generic function solving the equation system of the Pade method:
+2. Implement in Matlab a generic function for the Pade method, for any filyter order and any $h_d[n]$:
 
    ```matlab
    function [b,a] = pademethod(order, hd)

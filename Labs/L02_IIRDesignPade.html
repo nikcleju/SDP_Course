@@ -101,10 +101,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#objective" id="toc-objective" class="nav-link active" data-scroll-target="#objective"><span class="toc-section-number">1</span>  Objective</a></li>
+  <li><a href="#theoretical-notions" id="toc-theoretical-notions" class="nav-link" data-scroll-target="#theoretical-notions"><span class="toc-section-number">2</span>  Theoretical notions</a>
+  <ul class="collapse">
+  <li><a href="#the-pade-method" id="toc-the-pade-method" class="nav-link" data-scroll-target="#the-pade-method">The Pade method</a></li>
+  <li><a href="#mathematical-algorithm" id="toc-mathematical-algorithm" class="nav-link" data-scroll-target="#mathematical-algorithm">Mathematical algorithm</a></li>
+  </ul></li>
+  <li><a href="#matlab-notions" id="toc-matlab-notions" class="nav-link" data-scroll-target="#matlab-notions"><span class="toc-section-number">3</span>  Matlab notions</a>
+  <ul class="collapse">
+  <li><a href="#solve-system-of-equations-with-linsolve" id="toc-solve-system-of-equations-with-linsolve" class="nav-link" data-scroll-target="#solve-system-of-equations-with-linsolve">Solve system of equations with <code>linsolve()</code></a></li>
+  <li><a href="#calculate-impulse-response-with-impz" id="toc-calculate-impulse-response-with-impz" class="nav-link" data-scroll-target="#calculate-impulse-response-with-impz">Calculate impulse response with <code>impz()</code></a></li>
+  </ul></li>
+  <li><a href="#theoretical-exercises" id="toc-theoretical-exercises" class="nav-link" data-scroll-target="#theoretical-exercises"><span class="toc-section-number">4</span>  Theoretical exercises</a></li>
+  <li><a href="#practical-exercises" id="toc-practical-exercises" class="nav-link" data-scroll-target="#practical-exercises"><span class="toc-section-number">5</span>  Practical exercises</a></li>
+  <li><a href="#final-questions" id="toc-final-questions" class="nav-link" data-scroll-target="#final-questions"><span class="toc-section-number">6</span>  Final questions</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -241,7 +262,7 @@ x_2 \\
   \cdot
   \begin{bmatrix} a_1 \\ a_2 \\ b_0 \\ b_1 \\ b_2 \\ \end{bmatrix}
   \]</span></p></li>
-<li><p>Implement in Matlab a generic function solving the equation system of the Pade method:</p>
+<li><p>Implement in Matlab a generic function for the Pade method, for any filyter order and any <span class="math inline">\(h_d[n]\)</span>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> [<span class="va">b</span><span class="op">,</span><span class="va">a</span>] <span class="op">=</span> <span class="va">pademethod</span>(<span class="va">order</span><span class="op">,</span> <span class="va">hd</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

@@ -1,0 +1,225 @@
+---
+title: IIR filter design with the Prony method
+subtitle: Lab 3, SDP
+format: 
+  html: default
+  pdf: default
+  ipynb: default
+
+toc: true
+number-depth: 2
+number-sections: true
+
+jupyter: python3
+execute:
+  freeze: true
+  eval: false
+---
+
+\newcommand*{\underuparrow}[1]{\ensuremath{\underset{\uparrow}{#1}}} 
+
+## Objective
+
+Designing IIR filters with the Prony method.
+
+## Theoretical notions
+
+### Autocorrelation function
+
+For a $x[n]$, the autocorrelation function is defined as:
+$$r_{xx}[k] = \sum_{n=-\infty}^{\infty} x[n] x[n+k]$${#eq-xcorr}
+
+In Matlab, for a vector `x` of length `L` (elements going from `x[1]` to `x[L]`),
+the autocorrelation function is calculated with the `xcorr()` function, as in the following example:
+
+```matlab
+x = [1,2,3,4];
+rxx = xcorr(x) % Computes the autocorrelation of x
+```
+
+     rxx =
+    
+         4.0000 11.0000 20.0000 30.0000 20.0000 11.0000 4.0000
+    
+
+In total there are $2L-1$ values (where L = length of `x`), starting from $r_{xx}[-(L-1)]$ and ending at $r_{xx}[L-1]$.
+So the value $r_{xx}[0]$ from theory is located in Matlab in the middle of the resulting vector, `rxx(L)`:
+
+```matlab
+L = length(x);
+rxx(L)   % Value of r_xx[0]
+rxx(L+1) % Value of r_xx[1]
+rxx(L-3) % Value of r_xx[-3]
+```
+
+### Partial autocorrelation for the Prony method
+
+For the Prony method we need the values of a **partial autocorrelation** function, defined as:
+$$r_{xx}[k,l] = r_{xx}[k-l] = \sum_{n=M+1}^\infty h[n-k] h[n-l] = \sum_{n=M+1- k}^\infty h[n] h[n+(k-l)]$${#eq-xcorrpart}
+
+The difference is that the **sum doesn't start at $n=0$**, but from a higher value, so some of the first elements in the sum are missing.
+
+The partial autocorrelation can be calculated like the usual one, if the first $M + 1 - max(k,l)$ elements of the vector are transformed to 0.
+
+Let the following be the example to calculate $r_{xx}[k=1, l=2]$, with $M=2$:
+
+
+```matlab
+M = 2;
+x = [1,2,3,4];
+k=1;
+l=2;
+
+x(1 : M+1-max(k,l)) = 0; % We set the first values to 0
+x % Displays the changed x
+rxx = xcorr(x) % Calculates the partial autocorrelation
+```
+
+### The Prony method
+
+In the Prony method, the coefficients $\{a_k\}$ are first calculated from a system of equations using the partial autocorrelation values:
+
+$$
+\begin{bmatrix}
+r_{dd}[1,1] & r_{dd}[1,2] & \dots & r_{dd}[1,N] \\
+r_{dd}[2,1] & r_{dd}[2,2] & \dots & r_{dd}[2,N] \\
+\vdots & \dots & \dots & \vdots \\
+r_{dd}[N,1] & r_{dd}[N,2] & \dots & r_{dd}[N,N] \\
+\end{bmatrix}
+\begin{bmatrix}
+a_1 \\
+a_2 \\
+\vdots \\
+a_N \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+- r_{dd}[1,0] \\
+- r_{dd}[2,0] \\
+\vdots \\
+- r_{dd}[N,0] \\
+\end{bmatrix}$${#eq-pronya}
+
+
+The $b_k$ coefficients are obtained from the same equations as in the Pade method, replacing the $\{a_k\}$ values found above.
+The equations for $b_k$ can be written as follows:
+$$b_n = h_d[n] + \sum_{k=1}^N a_k h_d[n-k]$$
+or, in matrix form:
+$$
+\begin{bmatrix} b_0 \\ b_1 \\ b_2 \\ \dots \\ b_M \end{bmatrix}
+=
+\begin{bmatrix} h_d[0] \\ h_d[1] \\ h_d[2] \\ \dots \\ h_d[M] \end{bmatrix}
++
+\begin{bmatrix}
+0 & 0 & \cdots & 0 \\
+-h_d[0] & 0 & \cdots & 0 \\
+-h_d[1] & -h_d[0] & \cdots & 0\\
+\vdots & \vdots & & \vdots \\
+-h_d[M-1] & -h_d[M-2] & \cdots & -h_d[M-N] \\
+\end{bmatrix}
+\cdot
+\begin{bmatrix} a_1 \\ a_2 \\ \vdots \\ a_N\end{bmatrix}
+$${#eq-pronyb}
+
+## Theoretical exercises
+
+1. Use the Prony method to find the parameters of the 2nd-order system with the following system function:
+    $$H(z) = \frac{b_0 + b_1 z^{-1} + b_2 z^{-2}}{1 + a_1 z^{-1} + a_2 z^{-2}}$$
+
+    which approximates the desired impulse response
+    $$h_d[n] = \{...0,\underuparrow{1},2,3,2,1,2,3\}$$
+
+    (the origin of time $n=0$ is the first value of 1 in the sequence).
+
+## Practical exercises
+
+1. Compute and display the autocorrelation function for the constant vector $\{3, 3, 3, 3, 3, 3, 3\}$.
+   Use the `xcorr()` and `stem()` functions.
+
+   Then indicate what are the values of $r_{xx}[0]$ and $r_{xx}[2]$.
+
+2. Create a function `r = xcorr_prony(x, k, l, M)` to calculate the partial autocorrelation for a vector `x`.
+   The function must return a single value, $r_{xx}[k-l]$, for the specified $k$ and $l$.
+
+    **Note:** remember that $r_{xx}[0]$ = `rxx(L)` in Matlab.
+
+     Test the function by checking the following values for `x = [1,2,3,2,1,2,3]` and `M=2`:
+     - $r_{xx}[1,1] = 27$
+     - $r_{xx}[1,2] = 22$
+     - $r_{xx}[2,1] = 22$
+     - $r_{xx}[2,2] = 31$
+     - $r_{xx}[1,0] = r_{xx}[1] = 16$
+     - $r_{xx}[2,0] = r_{xx}[2] = 14$
+
+     Template:
+
+     ```matlab
+     function r = xcorr_prony(x, k, l, M)
+     % Computes restricted autocorrelation for the Prony method
+     %Inputs:
+     % x = the input vector
+     % k,l = the element to compute
+     % M = the degree of the numerator polynomial B(z)
+     % Returns:
+     % r = rxx[k-l]
+
+     ...
+
+     end
+     ```
+
+3. Use the Prony method to find the coefficients $a_k$ and $b_k$,
+   for a system of order 2 with $M=2$ and $N=2$,
+   and a desired impulse response equal to $h_d[n] = \{1,2,3,2,1,2,3\}$.
+   
+   Use the `linsolve()` function to solve the system of equations of $a_k$.
+
+     ```matlab
+     hd = [1,2,3,2,1,2,3];
+     M = 2; % numerator degree
+     N = 2; % denominator degree
+
+     % Find coefficients a_k
+     A = ... % 2x2 matrix
+     y = ... % 2x1 column vector
+
+     a = linsolve(A,y) % solve for a_k
+
+     % Find coefficients b_k
+     M = ... % copy part of the matrix from the Pade method
+     b = ... % compute the b_k coefficients
+     ```
+
+4. Implement in Matlab a general function for the Prony method,
+   for a system of any order and any signal $h_d[n]$.
+
+   ```matlab
+   [b,a] = prony_method(order, hd)
+   ```
+
+   The function shall receive as arguments:
+
+   - `order`: order of the desired filter
+   - `hd`: a vector with the desired impulse response
+
+   The function will return the coefficients of the designed filter:
+   
+   - `b`: coefficients of the numerator
+   - `a`: coefficients of the denominator
+
+5. Use the Prony method to find the parameters of the 2nd order filter
+   which approximates the following higher order filter of order 3:
+   $$H(z) = \frac{0.0736 + 0.0762 z^{-1} + 0.0762 z^{-1} + 0.0736 z^{-3}}
+{1 - 1.3969 z^{-1} + 0.8778 z^{-1} - 0.1812 z^{-3}}$$
+
+    a. Use the `impz()` function to generate a sufficiently long impulse response of the given filter (e.g. 100 samples);
+    b. Use the `prony_method()` function to design the 2nd order filter;
+    c. Plot the impulse response of the original filter on the same graph
+       and of the projected one, for the first 50 samples.
+
+6. Load an audio signal into Matlab and filter it with the filter designed above.
+Play the filtered signal to the audio output of the system.
+
+## Final questions
+
+1. TBD
