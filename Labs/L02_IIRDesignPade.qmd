@@ -161,6 +161,10 @@ h = impz(b, a, n);
      \begin{bmatrix} a_1 \\ a_2 \\ b_0 \\ b_1 \\ b_2 \\ \end{bmatrix}
      $$
 
+1. Compute the first 10 samples of the impulse response, using `impz()`,
+for the filter designed in the previous exercise. 
+   
+   Check that the first 5 samples are the same as $h_d[n]$. How about the next ones?
 
 2. Implement in Matlab a generic function for the Pade method, for any filyter order and any $h_d[n]$:
 
