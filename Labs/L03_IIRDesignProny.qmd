@@ -112,10 +112,10 @@ $$
 +
 \begin{bmatrix}
 0 & 0 & \cdots & 0 \\
--h_d[0] & 0 & \cdots & 0 \\
--h_d[1] & -h_d[0] & \cdots & 0\\
+h_d[0] & 0 & \cdots & 0 \\
+h_d[1] & h_d[0] & \cdots & 0\\
 \vdots & \vdots & & \vdots \\
--h_d[M-1] & -h_d[M-2] & \cdots & -h_d[M-N] \\
+h_d[M-1] & h_d[M-2] & \cdots & h_d[M-N] \\
 \end{bmatrix}
 \cdot
 \begin{bmatrix} a_1 \\ a_2 \\ \vdots \\ a_N\end{bmatrix}
