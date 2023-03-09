@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.1.179">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -135,7 +135,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
-  
     
   </div>
   
@@ -167,7 +166,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="partial-autocorrelation-for-the-prony-method">Partial autocorrelation for the Prony method</h3>
 <p>For the Prony method we need the values of a <strong>partial autocorrelation</strong> function, defined as: <span id="eq-xcorrpart"><span class="math display">\[r_{xx}[k,l] = r_{xx}[k-l] = \sum_{n=M+1}^\infty h[n-k] h[n-l] = \sum_{n=M+1- k}^\infty h[n] h[n+(k-l)] \tag{2}\]</span></span></p>
 <p>The difference is that the <strong>sum doesn’t start at <span class="math inline">\(n=0\)</span></strong>, but from a higher value, so some of the first elements in the sum are missing.</p>
-<p>The partial autocorrelation can be calculated like the usual one, if the first <span class="math inline">\(M + 1 - max(k,l)\)</span> elements of the vector are transformed to 0.</p>
+<p>The partial autocorrelation can be calculated like the usual one, if the first <span class="math inline">\(M + 1 - max(k,l)\)</span> elements of the vector are transformed to 0. The partial autocorrelation <span class="math inline">\(r_{xx}[k,l]\)</span> is the autocorrelation in <span class="math inline">\((k-l)\)</span> of the modified vector.</p>
 <p>Let the following be the example to calculate <span class="math inline">\(r_{xx}[k=1, l=2]\)</span>, with <span class="math inline">\(M=2\)</span>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">M</span> <span class="op">=</span> <span class="fl">2</span><span class="op">;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="op">=</span> [<span class="fl">1</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">3</span><span class="op">,</span><span class="fl">4</span>]<span class="op">;</span></span>
@@ -176,7 +175,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">x</span>(<span class="fl">1</span> <span class="op">:</span> <span class="va">M</span><span class="op">+</span><span class="fl">1</span><span class="op">-</span><span class="va">max</span>(<span class="va">k</span><span class="op">,</span><span class="va">l</span>)) <span class="op">=</span> <span class="fl">0</span><span class="op">;</span> <span class="co">% We set the first values to 0</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="co">% Displays the changed x</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="va">rxx</span> <span class="op">=</span> <span class="va">xcorr</span>(<span class="va">x</span>) <span class="co">% Calculates the partial autocorrelation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="va">rxx</span> <span class="op">=</span> <span class="va">xcorr</span>(<span class="va">x</span>) <span class="co">% Calculates the partial autocorrelation, the full vector</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="va">L</span> <span class="op">=</span> <span class="va">length</span>(<span class="va">x</span>)<span class="op">;</span>           <span class="co">% We want the autocorelation in [k-l]</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="va">rxx</span>(<span class="va">L</span><span class="op">+</span><span class="va">k</span><span class="op">-</span><span class="va">l</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="the-prony-method" class="level3">
 <h3 class="anchored" data-anchor-id="the-prony-method">The Prony method</h3>
@@ -268,8 +270,7 @@ h_d[M-1] &amp; h_d[M-2] &amp; \cdots &amp; h_d[M-N] \\
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="va">a</span> <span class="op">=</span> <span class="va">linsolve</span>(<span class="va">A</span><span class="op">,</span><span class="va">y</span>) <span class="co">% solve for a_k</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">% Find coefficients b_k</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="va">M</span> <span class="op">=</span> <span class="op">...</span> <span class="co">% copy part of the matrix from the Pade method</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="va">b</span> <span class="op">=</span> <span class="op">...</span> <span class="co">% compute the b_k coefficients</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="va">b</span> <span class="op">=</span> [<span class="op">...</span>] <span class="op">+</span> [<span class="op">...</span>] <span class="op">*</span> <span class="va">a</span>  <span class="co">% compute the b_k coefficients</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Implement in Matlab a general function for the Prony method, for a system of any order and any signal <span class="math inline">\(h_d[n]\)</span>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>[<span class="va">b</span><span class="op">,</span><span class="va">a</span>] <span class="op">=</span> <span class="va">prony_method</span>(<span class="va">order</span><span class="op">,</span> <span class="va">hd</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The function shall receive as arguments:</p>
@@ -342,24 +343,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
     setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -395,42 +379,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
       });
-    }
+      return popup.innerHTML;
+    });
   }
 });
 </script>

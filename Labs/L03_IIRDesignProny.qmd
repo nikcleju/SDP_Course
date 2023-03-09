@@ -60,6 +60,7 @@ $$r_{xx}[k,l] = r_{xx}[k-l] = \sum_{n=M+1}^\infty h[n-k] h[n-l] = \sum_{n=M+1- k
 The difference is that the **sum doesn't start at $n=0$**, but from a higher value, so some of the first elements in the sum are missing.
 
 The partial autocorrelation can be calculated like the usual one, if the first $M + 1 - max(k,l)$ elements of the vector are transformed to 0.
+The partial autocorrelation $r_{xx}[k,l]$ is the autocorrelation in $(k-l)$ of the modified vector.
 
 Let the following be the example to calculate $r_{xx}[k=1, l=2]$, with $M=2$:
 
@@ -72,7 +73,11 @@ l=2;
 
 x(1 : M+1-max(k,l)) = 0; % We set the first values to 0
 x % Displays the changed x
-rxx = xcorr(x) % Calculates the partial autocorrelation
+rxx = xcorr(x) % Calculates the partial autocorrelation, the full vector
+
+L = length(x);			 % We want the autocorelation in [k-l]
+rxx(L+k-l)
+
 ```
 
 ### The Prony method
@@ -186,8 +191,7 @@ $${#eq-pronyb}
      a = linsolve(A,y) % solve for a_k
 
      % Find coefficients b_k
-     M = ... % copy part of the matrix from the Pade method
-     b = ... % compute the b_k coefficients
+     b = [...] + [...] * a  % compute the b_k coefficients
      ```
 
 4. Implement in Matlab a general function for the Prony method,
