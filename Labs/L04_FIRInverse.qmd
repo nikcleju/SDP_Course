@@ -1,0 +1,479 @@
+---
+title: Designing the FIR inverse filter
+subtitle: Lab 4, SDP
+format: 
+  html: default
+  pdf: default
+  ipynb: default
+
+toc: true
+number-depth: 2
+number-sections: true
+
+jupyter: python3
+execute:
+  freeze: true
+  eval: false
+---
+
+<!-- 
+
+## Aplicații ale metodelor din familia Pade / Prony / Shanks 
+
+Contextul tuturor acestor metode este următorul:
+
+Avem un sistem cu răspuns la impuls cunoscut $h[n]$, posibil foarte lung (IIR-like). Ne interesează să cunoaștem parametrii $a_k$ și $b_k$ ai sistemului care l-a generat, care sunt în număr mult mai mic.
+
+Posibile scopuri:
+- Implementare eficientă: mult mai puține calcule
+- Clasificarea semnalului: număr mic și fix de parametri, care caracterizează întreg semnalul
+- Egalizare de canal: anularea efectului nedorit cauzat de $h[n]$
+
+### Funcțiile folosite
+
+1. Metoda Pade implementată la laborator
+2. Metoda Prony implementată la laborator
+3. Metoda Shanks, implementată in Matlab cu numele `prony()`  (nu e disponibilă în varianta *live*, care folosește Octave)
+
+Rulați celulele de mai jos pentru a defini funcțiile.
+
+
+```matlab
+function [b,a] = metodapade(ordin, hd)
+
+    B = hd(1 : 2*ordin+1)';
+
+    Adreapta = [ eye(ordin+1) ; zeros(ordin,ordin+1) ];
+
+    for i=1:ordin
+        % coloana numarul i
+        A(:,i) = [ zeros(i,1) ; -hd(1 : 2*ordin+1 - i)'];
+    end    
+    A = [A Adreapta];
+
+    X = linsolve(A,B);
+    a = X(1:ordin);
+    b = X(ordin+1 : 2*ordin+1);
+
+end  # end function
+```
+
+
+```matlab
+function r = xcorr_prony(x, k, l, M)
+    % Computes restricted autocorrelation for the Prony method
+    % Inputs:
+    %  x = the input vector
+    %  k,l = the element to compute
+    %  M = the degree of the numerator polynomial B(z)
+    % Returns:
+    %  r = rxx[k,l] = rxx[k-l]
+
+    x(1 : M+1-max(k,l)) = 0; % Setăm primele valori la 0
+    rxx = xcorr(x);          % Calculeaza autocorelatia partiala
+
+    % Returneaza doar o singura valoare, rxx[k-l]
+    L = length(x);
+    r = rxx(L + k-l);
+end
+
+function [b,a] = metodaprony(ordin, hd)
+    % Nicolae Cleju
+
+    % Se creeaza A
+    for i=1:ordin
+        for j=1:ordin
+            A(i,j) = xcorr_prony(hd, i, j, ordin);
+        end
+    end
+    % Se creeaza B
+    for i=1:ordin
+        B(i,1) = -xcorr_prony(hd, i, 0, ordin);
+    end
+    % Se rezolva sistemul AX=B
+    a = linsolve(A,B);
+
+    % Calculeaza b
+    for n=0:ordin
+        % Primele ecuatii de la metode Pade
+        b(1+n) = hd(n+1) + sum(a(1:n)' .* hd(n:-1:1));
+    end
+    b=b';
+end
+```
+
+## Egalizare de canal
+
+Se transmite un semnal $x[n]$ pe un canal care alterează semnalul prin funcția de transfer $H(z)$.
+
+Nu cunoaștem $H(z)$, dar putem măsura răspunsul la impuls: trimitem un impuls $\delta[n]$, măsurăm ieșirea $h[n]$.
+
+Vrem să anulăm efectul lui $H(z)$ astfel:
+- estimăm $H(z)$ prin metodele cunoscute
+- aplicăm asupra oricărei ieșitri **filtrul invers** $\frac{1}{H(z)}$
+
+### Aplicație
+
+Avem un canal care introduce distorsiuni, prin următoarele funcții (diferite variante):
+
+
+
+```matlab
+function y = distort(x)
+    % Distort a signal x
+    b = [0.6, 0.5, 0.2, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.1];
+    a = [1,-0.5];
+    y = filter(b, a, x);
+end
+
+function y = distortN(x)
+    % Distort a signal x, add noise
+    y = distort(x);
+    noise = randn(size(y));
+    y = y + noise * norm(y) / norm(noise) / 60;
+end
+
+function y = distort2(x)
+    % Distort a signal x
+    b = [0.2, 0.5, 0.2, 0.6, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.1];
+    a = [1,-0.5];
+    y = filter(b, a, x);
+end
+
+function y = distort2N(x)
+    % Distort a signal x, add noise
+    y = distort2(x);
+    noise = randn(size(y));
+    y = y + noise * norm(y) / norm(noise) / 60;
+end
+```
+
+De exemplu, pentru semnalul `x` de mai jos, ieșirea distorsionată cu `distort()` este următoarea:
+
+
+```matlab
+x = [zeros(1, 10) 2*ones(1,20) zeros(1,10) linspace(1, 2.5, 40) 2.5*ones(1,10) zeros(1, 15)];
+plot(x)
+```
+
+
+```matlab
+y = distort(x);
+plot(y)
+```
+
+Calcluați și afișați semnalul distorsionat cu celelalte funcții. Care e diferența?
+
+
+```matlab
+% TODO: write here for distortN()
+yN = ...
+plot(yN)
+```
+
+
+```matlab
+% TODO: write here for distort2()
+y2 = ...
+plot(y2)
+```
+
+
+```matlab
+% TODO: write here for distort2N()
+y2N = ...
+plot(y2N)
+```
+
+#### Cerințe
+
+Estimați **filtrul invers** al distorsiunilor pentru a anula efectele acestuia, pe cât posibil.
+
+Pași:
+1. Calculați răspunsul la impuls $h_{canal}[n]$ al distorsiunii
+2. Estimați parametrii sistemului $H(z)$ cu funcțiile Pade/Prony/etc
+   - calculați răspunsul la impuls $h[n]$ cu `impz()`
+   - afișați pe aceeasi figură $h_{canal}[n]$ și $h[n$ 
+   - comparați coeficienții $b$ și $a$ obținuți cu cei din funcțiile `distort()`
+3. Afișați polii și zerourile filtrului estimat, folosind funcția `zplane()`
+3. Aplicați semnalului `y` filtrul invers $\frac{1}{H(z)}$, folosind funcția `filter()`
+4. Comparați semnalul obținut `xrec` cu originalul `x`
+   - afișați-le pe aceeasi figură
+
+
+
+```matlab
+% Compute and show the impulse response of the distortion
+hcanal = distort( ... );
+plot(hcanal)
+```
+
+
+```matlab
+% Estimate the parameters b_k and a_k with one of the functions
+[b,a] = ...
+
+% Add a_0 in front (a_0 = 1)
+a = [1; a]
+
+```
+
+
+```matlab
+% Compute impulse response of the filter we obtained, and plot it
+hest = ...
+plot(hest)
+```
+
+
+```matlab
+
+% Plot hcanal and hest on the same figure
+plot( ... )
+```
+
+
+```matlab
+% Plot the pole-zero plot of the designed filter, using zplane()
+...
+```
+
+
+```matlab
+% Apply inverse filter to the distorted signal y
+xrec = ...
+
+% Plot original signal x and the recovered xrec
+plot([x', xrec'])
+``` -->
+
+## Obiectiv
+
+Using the least-squares design method for finding the FIR approximation of the inverse of a filter.
+
+## Theoretical notions
+
+### The inverse filter
+
+The inverse filter $H_I(z)$ of any given filter $H(z)$ is the system that cancels the effect of $H(z)$ on a signal:
+$$H_I \lbrace  H \lbrace x[n] \rbrace \rbrace \approx x[n]$$
+
+![](img/FIRinverse.png)
+
+A direct solution is the inverse filter defined as:
+$$H_I(z) = \frac{1}{H(z)}$$
+
+Possible problems:
+
+- $H_I(z)$ is unstable if $H(z)$ has zeros outside the unit circle
+
+Solution:
+
+- We search for an **FIR filter** that approximates the inverse filter
+- Being FIR, it is always stable
+  $$H_I(z) = b_0 + b_1 z^{-1} + \dots + b_M z^{-N} \approx \frac{1}{H(z)}$$
+
+### Designing the inverse FIR filter using the least squares method
+
+Given a filter $H(z)$ with impulse response $h[n]$, 
+the inverse FIR filter $H_I(z) = b_0 + ... + b_Nz^{N}$ is obtained by solving the following system (similar to the Prony method):
+
+$$
+\begin{bmatrix} 
+h[0] \\ 
+0 \\ 
+\vdots \\ 
+0 \\ 
+\end{bmatrix}
+=
+\begin{bmatrix}
+r_{hh}[0] & r_{hh}[-1] & \dots & r_{hh}[-N)] \\
+r_{hh}[1] & r_{hh}[0] & \dots & r_{hh}[-N+1)] \\
+\vdots & \dots & \dots & \vdots \\ 
+r_{hh}[N] & r_{hh}[N-1] & \dots & r_{hh}[0] \\
+\end{bmatrix}
+\begin{bmatrix} 
+b_0 \\ 
+b_1 \\ 
+\vdots \\ 
+b_N \\ 
+\end{bmatrix}
+$$
+
+The $r_{hh}$ values are the autocorrelation values of the signal $h[n]$.
+
+### Design of the inverse FIR filter using the Prony method (variant)
+
+We want to design a filter $H_I(z)$ such that:
+$$
+\begin{aligned}
+H(z) \cdot H_I(z) &\approx 1 \\
+\frac{1}{H_I(z)} &\approx H(z) \\
+\frac{1}{b_0 + b_1 z^{-1} + \dots + b_Nz^{-N}} &\approx H(z) \\
+\frac{1/b_0}{1 + b_1/b_0 z^{-1} + \dots + b_N/b_0 z^{-N}} &\approx H(z) \\
+\end{aligned}
+$$
+
+The above relation, expressed in the time domain::
+$$h_I[n] \approx \underbrace{h[n]}_{h_d[n]} $$
+
+We want to design a filter of the form $$\frac{1/b_0}{1 + b_1/b_0 z^{-1} + \dots + b_N/b_0 z^{-N}}$$ whose impulse response $h_I[n]$ 
+approximates the impulse response of the original filter, $h[n]$.
+
+We can use the Prony method for this purpose, with degree of numerator equal to $0$ and degree of denominator equal to $N$.
+
+Solution using the Prony method:
+
+1. Design a filter $\frac{b_0'}{1 + a_1' z^{-1} + \dots + a_N' z^{-N}}$ that approximates 
+   the desired impulse response = impulse response of the original filter, $h_d[n] = h[n]$
+
+2. After obtaining the coefficients, we force simplify by $b_0'$ (the numerator coefficient)
+
+3. The resulting denominator, $1/b_0' + a_1'/b_0' z^{-1} + \dots + a_N'/b_0' z^{-M}$, is the system function of the obtained inverse FIR filter
+    $$H_I(z) = 1/b_0' + a_1'/b_0' z^{-1} + \dots + a_N'/b_0' z^{-N} = b_0 + b_1 z^{-1} + \dots + b_Nz^{-N}$$
+
+## Theoretical Exercise
+
+1. Use the least squares method to find the inverse FIR filter of order 2 for the following filter:
+   $$H(z) = 0.2 + 0.8 z^{-1} + 0.2 z^{-2}$$
+
+## Practical Exercises
+
+1. Solve numerically in Matlab the system of equations corresponding to the design of the inverse FIR filter from the theoretical exercise,
+   using the `linsolve()` function.
+
+2. Implement in Matlab a general function that designs the inverse FIR filter for any order and any impulse response $h[n]$:
+
+    ```matlab
+    function b = inversefir(order, h)
+    ...
+    end
+    ```
+    
+    The function will receive the following arguments:
+
+    - `order`: the desired order of the filter
+    - `hd`: a vector with the impulse response of the original filter (as long as possible)
+
+    The function will return the coefficients of the system function of the designed FIR filter (only the numerator coefficients, since it is FIR):
+
+    - `b`: the numerator coefficients
+
+3. Verification: use the above function to find the inverse FIR filter of the filter from the theoretical exercise:
+   $$H(z) = 0.2 + 0.8 z^{-1} + 0.2 z^{-2}$$
+
+   Note: for FIR filters, the impulse response has the same values as the coefficients of $H(z)$.
+
+4. Use the function above to find the inverse FIR filter for the following two filters:
+   $$H_1(z) = \frac{1}{1 + 0.1 z^{-1} - 0.3 z^{-2}}$$
+   $$H_2(z) = \frac{3}{1 + 0.1 z^{-1} - 0.3 z^{-2}}$$
+
+   You should first call `impz()` and generate a sufficiently long impulse response of these filters (e.g. 100 samples).
+
+5. Load an audio signal into Matlab and filter it with $H(z)$, then with its inverse. How does each signal sound?
+
+
+## Final Questions
+
+1. TBD
+
+
+<!-- 
+
+### Implementare
+
+Scrieți o funcție care obține filtrul FIR invers:
+
+
+```matlab
+function [b] = FIRinvers(ord, h)
+
+    % TODO: write code here
+
+end
+```
+
+### Aplicație
+
+Aplicăm această metodă distorsiunilor de tip `distort2()` care nu pot fi anulate cu metodele precedente.
+
+Calculăm filtrul invers și îl aplicăm semnalului distorsionat.
+
+
+```matlab
+h = distort2([1 zeros(1,30)]);
+
+b = FIRinvers( ... );
+
+xrec = filter( ... );
+
+plot([x', xrec'])
+
+```
+
+## Implementare eficientă / identificare de sistem
+
+Descărcați și dezarhivați ecourile (reverb-urile) disponibile pe pagina [https://www.voxengo.com/impulses/](https://www.voxengo.com/impulses/)
+
+Încărcați unul dintre cele mai scurte (de ex. `Direct Cabinet N2.wav`) și aplicați-l asupra unei melodii.
+
+
+```matlab
+% Load impulse response, keep a single column, plot it
+[h, Fs2] = ...
+h = h(:, 1);
+plot(h)
+
+% Load signal, keep a single column
+...
+
+% Apply reverb = convolution between `x` and `h`
+y = ...
+```
+
+Să afișăm primele 200 eșantioane din `h`:
+
+
+```matlab
+plot(h(1:200))
+```
+
+### Problema
+
+Dacă lungimea lui $h$ este L, câte calcule se fac la aplicarea convoluției?
+
+- L înmulțiri pentru fiecare eșantion al iesirii $y$
+- sunt $F_s$ eșantioane pe secundă în $y$
+- total = 
+
+Dacă am reuși să exprimăm $h$ ca un răspuns la impuls al unui sistem IIR de gradul `ord`, 
+am putea implementa sistemul cu ecuația sistemului, care utilizează doar `2*ord +1` multiplicări.
+
+### Soluție
+
+Utilizăm metodele tip Prony pentru a găsi un sistem al cărui $h[n]$ aproximează $h_d$-ul dorit.
+
+Aproximați semnalul $h$ prin metoda Pade / Prony, încercând diverse valori ale lui `ord`.
+
+- rulați funcția și obțineți coeficienții `b` și `a`
+- având $b_k$ și $a_k$, calculați răspunsul la impuls obținut $h[n]$ pentru primele 44100 eșantioane cu `impz()`
+- afișați semnalele $h[n]$ (cel proiectat) și $h_d[n]$ (cel țintă) pe aceeași figură, pentru comparație
+- calculați eroarea dintre cele două semnale cu formula:
+  $$E = \sum_n (h[n] - h_d[n])^2$$
+
+
+```matlab
+% TODO: write here
+```
+
+O problemă importantă este că primele eșantioanele ale lui $h$ sunt foarte mici și irelevante, iar metodele Pade & Prony 
+aleg o parte din coeficienți pe baza acestora. 
+
+Se poate încerca eliminarea primelor eșantioane din semnalul $h$.
+
+
+
+## Exercițiu / Exemplu la tablă
+
+1. Folosiți metoda celor mai mici pătrate pentru a găsi filtrul FIR invers de ordinul 2 al filtrului:
+   $$H(z) = 0.2 + 0.8 z^{-1} + 0.2 z^{-2}$$ -->

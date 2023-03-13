@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Designing the FIR inverse filter</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="L04_FIRInverse_files/libs/clipboard/clipboard.min.js"></script>
+<script src="L04_FIRInverse_files/libs/quarto-html/quarto.js"></script>
+<script src="L04_FIRInverse_files/libs/quarto-html/popper.min.js"></script>
+<script src="L04_FIRInverse_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="L04_FIRInverse_files/libs/quarto-html/anchor.min.js"></script>
+<link href="L04_FIRInverse_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="L04_FIRInverse_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="L04_FIRInverse_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="L04_FIRInverse_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="L04_FIRInverse_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#obiectiv" id="toc-obiectiv" class="nav-link active" data-scroll-target="#obiectiv"><span class="toc-section-number">1</span>  Obiectiv</a></li>
+  <li><a href="#theoretical-notions" id="toc-theoretical-notions" class="nav-link" data-scroll-target="#theoretical-notions"><span class="toc-section-number">2</span>  Theoretical notions</a>
+  <ul class="collapse">
+  <li><a href="#the-inverse-filter" id="toc-the-inverse-filter" class="nav-link" data-scroll-target="#the-inverse-filter">The inverse filter</a></li>
+  <li><a href="#designing-the-inverse-fir-filter-using-the-least-squares-method" id="toc-designing-the-inverse-fir-filter-using-the-least-squares-method" class="nav-link" data-scroll-target="#designing-the-inverse-fir-filter-using-the-least-squares-method">Designing the inverse FIR filter using the least squares method</a></li>
+  <li><a href="#design-of-the-inverse-fir-filter-using-the-prony-method-variant" id="toc-design-of-the-inverse-fir-filter-using-the-prony-method-variant" class="nav-link" data-scroll-target="#design-of-the-inverse-fir-filter-using-the-prony-method-variant">Design of the inverse FIR filter using the Prony method (variant)</a></li>
+  </ul></li>
+  <li><a href="#theoretical-exercise" id="toc-theoretical-exercise" class="nav-link" data-scroll-target="#theoretical-exercise"><span class="toc-section-number">3</span>  Theoretical Exercise</a></li>
+  <li><a href="#practical-exercises" id="toc-practical-exercises" class="nav-link" data-scroll-target="#practical-exercises"><span class="toc-section-number">4</span>  Practical Exercises</a></li>
+  <li><a href="#final-questions" id="toc-final-questions" class="nav-link" data-scroll-target="#final-questions"><span class="toc-section-number">5</span>  Final Questions</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Designing the FIR inverse filter</h1>
+<p class="subtitle lead">Lab 4, SDP</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- 
+
+## Aplicații ale metodelor din familia Pade / Prony / Shanks 
+
+Contextul tuturor acestor metode este următorul:
+
+Avem un sistem cu răspuns la impuls cunoscut $h[n]$, posibil foarte lung (IIR-like). Ne interesează să cunoaștem parametrii $a_k$ și $b_k$ ai sistemului care l-a generat, care sunt în număr mult mai mic.
+
+Posibile scopuri:
+- Implementare eficientă: mult mai puține calcule
+- Clasificarea semnalului: număr mic și fix de parametri, care caracterizează întreg semnalul
+- Egalizare de canal: anularea efectului nedorit cauzat de $h[n]$
+
+### Funcțiile folosite
+
+1. Metoda Pade implementată la laborator
+2. Metoda Prony implementată la laborator
+3. Metoda Shanks, implementată in Matlab cu numele `prony()`  (nu e disponibilă în varianta *live*, care folosește Octave)
+
+Rulați celulele de mai jos pentru a defini funcțiile.
+
+
+```matlab
+function [b,a] = metodapade(ordin, hd)
+
+    B = hd(1 : 2*ordin+1)';
+
+    Adreapta = [ eye(ordin+1) ; zeros(ordin,ordin+1) ];
+
+    for i=1:ordin
+        % coloana numarul i
+        A(:,i) = [ zeros(i,1) ; -hd(1 : 2*ordin+1 - i)'];
+    end    
+    A = [A Adreapta];
+
+    X = linsolve(A,B);
+    a = X(1:ordin);
+    b = X(ordin+1 : 2*ordin+1);
+
+end  # end function
+```
+
+
+```matlab
+function r = xcorr_prony(x, k, l, M)
+    % Computes restricted autocorrelation for the Prony method
+    % Inputs:
+    %  x = the input vector
+    %  k,l = the element to compute
+    %  M = the degree of the numerator polynomial B(z)
+    % Returns:
+    %  r = rxx[k,l] = rxx[k-l]
+
+    x(1 : M+1-max(k,l)) = 0; % Setăm primele valori la 0
+    rxx = xcorr(x);          % Calculeaza autocorelatia partiala
+
+    % Returneaza doar o singura valoare, rxx[k-l]
+    L = length(x);
+    r = rxx(L + k-l);
+end
+
+function [b,a] = metodaprony(ordin, hd)
+    % Nicolae Cleju
+
+    % Se creeaza A
+    for i=1:ordin
+        for j=1:ordin
+            A(i,j) = xcorr_prony(hd, i, j, ordin);
+        end
+    end
+    % Se creeaza B
+    for i=1:ordin
+        B(i,1) = -xcorr_prony(hd, i, 0, ordin);
+    end
+    % Se rezolva sistemul AX=B
+    a = linsolve(A,B);
+
+    % Calculeaza b
+    for n=0:ordin
+        % Primele ecuatii de la metode Pade
+        b(1+n) = hd(n+1) + sum(a(1:n)' .* hd(n:-1:1));
+    end
+    b=b';
+end
+```
+
+## Egalizare de canal
+
+Se transmite un semnal $x[n]$ pe un canal care alterează semnalul prin funcția de transfer $H(z)$.
+
+Nu cunoaștem $H(z)$, dar putem măsura răspunsul la impuls: trimitem un impuls $\delta[n]$, măsurăm ieșirea $h[n]$.
+
+Vrem să anulăm efectul lui $H(z)$ astfel:
+- estimăm $H(z)$ prin metodele cunoscute
+- aplicăm asupra oricărei ieșitri **filtrul invers** $\frac{1}{H(z)}$
+
+### Aplicație
+
+Avem un canal care introduce distorsiuni, prin următoarele funcții (diferite variante):
+
+
+
+```matlab
+function y = distort(x)
+    % Distort a signal x
+    b = [0.6, 0.5, 0.2, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.1];
+    a = [1,-0.5];
+    y = filter(b, a, x);
+end
+
+function y = distortN(x)
+    % Distort a signal x, add noise
+    y = distort(x);
+    noise = randn(size(y));
+    y = y + noise * norm(y) / norm(noise) / 60;
+end
+
+function y = distort2(x)
+    % Distort a signal x
+    b = [0.2, 0.5, 0.2, 0.6, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.1];
+    a = [1,-0.5];
+    y = filter(b, a, x);
+end
+
+function y = distort2N(x)
+    % Distort a signal x, add noise
+    y = distort2(x);
+    noise = randn(size(y));
+    y = y + noise * norm(y) / norm(noise) / 60;
+end
+```
+
+De exemplu, pentru semnalul `x` de mai jos, ieșirea distorsionată cu `distort()` este următoarea:
+
+
+```matlab
+x = [zeros(1, 10) 2*ones(1,20) zeros(1,10) linspace(1, 2.5, 40) 2.5*ones(1,10) zeros(1, 15)];
+plot(x)
+```
+
+
+```matlab
+y = distort(x);
+plot(y)
+```
+
+Calcluați și afișați semnalul distorsionat cu celelalte funcții. Care e diferența?
+
+
+```matlab
+% TODO: write here for distortN()
+yN = ...
+plot(yN)
+```
+
+
+```matlab
+% TODO: write here for distort2()
+y2 = ...
+plot(y2)
+```
+
+
+```matlab
+% TODO: write here for distort2N()
+y2N = ...
+plot(y2N)
+```
+
+#### Cerințe
+
+Estimați **filtrul invers** al distorsiunilor pentru a anula efectele acestuia, pe cât posibil.
+
+Pași:
+1. Calculați răspunsul la impuls $h_{canal}[n]$ al distorsiunii
+2. Estimați parametrii sistemului $H(z)$ cu funcțiile Pade/Prony/etc
+   - calculați răspunsul la impuls $h[n]$ cu `impz()`
+   - afișați pe aceeasi figură $h_{canal}[n]$ și $h[n$ 
+   - comparați coeficienții $b$ și $a$ obținuți cu cei din funcțiile `distort()`
+3. Afișați polii și zerourile filtrului estimat, folosind funcția `zplane()`
+3. Aplicați semnalului `y` filtrul invers $\frac{1}{H(z)}$, folosind funcția `filter()`
+4. Comparați semnalul obținut `xrec` cu originalul `x`
+   - afișați-le pe aceeasi figură
+
+
+
+```matlab
+% Compute and show the impulse response of the distortion
+hcanal = distort( ... );
+plot(hcanal)
+```
+
+
+```matlab
+% Estimate the parameters b_k and a_k with one of the functions
+[b,a] = ...
+
+% Add a_0 in front (a_0 = 1)
+a = [1; a]
+
+```
+
+
+```matlab
+% Compute impulse response of the filter we obtained, and plot it
+hest = ...
+plot(hest)
+```
+
+
+```matlab
+
+% Plot hcanal and hest on the same figure
+plot( ... )
+```
+
+
+```matlab
+% Plot the pole-zero plot of the designed filter, using zplane()
+...
+```
+
+
+```matlab
+% Apply inverse filter to the distorted signal y
+xrec = ...
+
+% Plot original signal x and the recovered xrec
+plot([x', xrec'])
+``` -->
+<section id="obiectiv" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="obiectiv"><span class="header-section-number">1</span> Obiectiv</h2>
+<p>Using the least-squares design method for finding the FIR approximation of the inverse of a filter.</p>
+</section>
+<section id="theoretical-notions" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="theoretical-notions"><span class="header-section-number">2</span> Theoretical notions</h2>
+<section id="the-inverse-filter" class="level3">
+<h3 class="anchored" data-anchor-id="the-inverse-filter">The inverse filter</h3>
+<p>The inverse filter <span class="math inline">\(H_I(z)\)</span> of any given filter <span class="math inline">\(H(z)\)</span> is the system that cancels the effect of <span class="math inline">\(H(z)\)</span> on a signal: <span class="math display">\[H_I \lbrace  H \lbrace x[n] \rbrace \rbrace \approx x[n]\]</span></p>
+<p><img src="img/FIRinverse.png" class="img-fluid"></p>
+<p>A direct solution is the inverse filter defined as: <span class="math display">\[H_I(z) = \frac{1}{H(z)}\]</span></p>
+<p>Possible problems:</p>
+<ul>
+<li><span class="math inline">\(H_I(z)\)</span> is unstable if <span class="math inline">\(H(z)\)</span> has zeros outside the unit circle</li>
+</ul>
+<p>Solution:</p>
+<ul>
+<li>We search for an <strong>FIR filter</strong> that approximates the inverse filter</li>
+<li>Being FIR, it is always stable <span class="math display">\[H_I(z) = b_0 + b_1 z^{-1} + \dots + b_M z^{-N} \approx \frac{1}{H(z)}\]</span></li>
+</ul>
+</section>
+<section id="designing-the-inverse-fir-filter-using-the-least-squares-method" class="level3">
+<h3 class="anchored" data-anchor-id="designing-the-inverse-fir-filter-using-the-least-squares-method">Designing the inverse FIR filter using the least squares method</h3>
+<p>Given a filter <span class="math inline">\(H(z)\)</span> with impulse response <span class="math inline">\(h[n]\)</span>, the inverse FIR filter <span class="math inline">\(H_I(z) = b_0 + ... + b_Nz^{N}\)</span> is obtained by solving the following system (similar to the Prony method):</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+h[0] \\
+0 \\
+\vdots \\
+0 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+r_{hh}[0] &amp; r_{hh}[-1] &amp; \dots &amp; r_{hh}[-N)] \\
+r_{hh}[1] &amp; r_{hh}[0] &amp; \dots &amp; r_{hh}[-N+1)] \\
+\vdots &amp; \dots &amp; \dots &amp; \vdots \\
+r_{hh}[N] &amp; r_{hh}[N-1] &amp; \dots &amp; r_{hh}[0] \\
+\end{bmatrix}
+\begin{bmatrix}
+b_0 \\
+b_1 \\
+\vdots \\
+b_N \\
+\end{bmatrix}
+\]</span></p>
+<p>The <span class="math inline">\(r_{hh}\)</span> values are the autocorrelation values of the signal <span class="math inline">\(h[n]\)</span>.</p>
+</section>
+<section id="design-of-the-inverse-fir-filter-using-the-prony-method-variant" class="level3">
+<h3 class="anchored" data-anchor-id="design-of-the-inverse-fir-filter-using-the-prony-method-variant">Design of the inverse FIR filter using the Prony method (variant)</h3>
+<p>We want to design a filter <span class="math inline">\(H_I(z)\)</span> such that: <span class="math display">\[
+\begin{aligned}
+H(z) \cdot H_I(z) &amp;\approx 1 \\
+\frac{1}{H_I(z)} &amp;\approx H(z) \\
+\frac{1}{b_0 + b_1 z^{-1} + \dots + b_Nz^{-N}} &amp;\approx H(z) \\
+\frac{1/b_0}{1 + b_1/b_0 z^{-1} + \dots + b_N/b_0 z^{-N}} &amp;\approx H(z) \\
+\end{aligned}
+\]</span></p>
+<p>The above relation, expressed in the time domain:: <span class="math display">\[h_I[n] \approx \underbrace{h[n]}_{h_d[n]} \]</span></p>
+<p>We want to design a filter of the form <span class="math display">\[\frac{1/b_0}{1 + b_1/b_0 z^{-1} + \dots + b_N/b_0 z^{-N}}\]</span> whose impulse response <span class="math inline">\(h_I[n]\)</span> approximates the impulse response of the original filter, <span class="math inline">\(h[n]\)</span>.</p>
+<p>We can use the Prony method for this purpose, with degree of numerator equal to <span class="math inline">\(0\)</span> and degree of denominator equal to <span class="math inline">\(N\)</span>.</p>
+<p>Solution using the Prony method:</p>
+<ol type="1">
+<li><p>Design a filter <span class="math inline">\(\frac{b_0'}{1 + a_1' z^{-1} + \dots + a_N' z^{-N}}\)</span> that approximates the desired impulse response = impulse response of the original filter, <span class="math inline">\(h_d[n] = h[n]\)</span></p></li>
+<li><p>After obtaining the coefficients, we force simplify by <span class="math inline">\(b_0'\)</span> (the numerator coefficient)</p></li>
+<li><p>The resulting denominator, <span class="math inline">\(1/b_0' + a_1'/b_0' z^{-1} + \dots + a_N'/b_0' z^{-M}\)</span>, is the system function of the obtained inverse FIR filter <span class="math display">\[H_I(z) = 1/b_0' + a_1'/b_0' z^{-1} + \dots + a_N'/b_0' z^{-N} = b_0 + b_1 z^{-1} + \dots + b_Nz^{-N}\]</span></p></li>
+</ol>
+</section>
+</section>
+<section id="theoretical-exercise" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="theoretical-exercise"><span class="header-section-number">3</span> Theoretical Exercise</h2>
+<ol type="1">
+<li>Use the least squares method to find the inverse FIR filter of order 2 for the following filter: <span class="math display">\[H(z) = 0.2 + 0.8 z^{-1} + 0.2 z^{-2}\]</span></li>
+</ol>
+</section>
+<section id="practical-exercises" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="practical-exercises"><span class="header-section-number">4</span> Practical Exercises</h2>
+<ol type="1">
+<li><p>Solve numerically in Matlab the system of equations corresponding to the design of the inverse FIR filter from the theoretical exercise, using the <code>linsolve()</code> function.</p></li>
+<li><p>Implement in Matlab a general function that designs the inverse FIR filter for any order and any impulse response <span class="math inline">\(h[n]\)</span>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="va">b</span> <span class="op">=</span> <span class="va">inversefir</span>(<span class="va">order</span><span class="op">,</span> <span class="va">h</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The function will receive the following arguments:</p>
+<ul>
+<li><code>order</code>: the desired order of the filter</li>
+<li><code>hd</code>: a vector with the impulse response of the original filter (as long as possible)</li>
+</ul>
+<p>The function will return the coefficients of the system function of the designed FIR filter (only the numerator coefficients, since it is FIR):</p>
+<ul>
+<li><code>b</code>: the numerator coefficients</li>
+</ul></li>
+<li><p>Verification: use the above function to find the inverse FIR filter of the filter from the theoretical exercise: <span class="math display">\[H(z) = 0.2 + 0.8 z^{-1} + 0.2 z^{-2}\]</span></p>
+<p>Note: for FIR filters, the impulse response has the same values as the coefficients of <span class="math inline">\(H(z)\)</span>.</p></li>
+<li><p>Use the function above to find the inverse FIR filter for the following two filters: <span class="math display">\[H_1(z) = \frac{1}{1 + 0.1 z^{-1} - 0.3 z^{-2}}\]</span> <span class="math display">\[H_2(z) = \frac{3}{1 + 0.1 z^{-1} - 0.3 z^{-2}}\]</span></p>
+<p>You should first call <code>impz()</code> and generate a sufficiently long impulse response of these filters (e.g.&nbsp;100 samples).</p></li>
+<li><p>Load an audio signal into Matlab and filter it with <span class="math inline">\(H(z)\)</span>, then with its inverse. How does each signal sound?</p></li>
+</ol>
+</section>
+<section id="final-questions" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="final-questions"><span class="header-section-number">5</span> Final Questions</h2>
+<ol type="1">
+<li>TBD</li>
+</ol>
+<!-- 
+
+### Implementare
+
+Scrieți o funcție care obține filtrul FIR invers:
+
+
+```matlab
+function [b] = FIRinvers(ord, h)
+
+    % TODO: write code here
+
+end
+```
+
+### Aplicație
+
+Aplicăm această metodă distorsiunilor de tip `distort2()` care nu pot fi anulate cu metodele precedente.
+
+Calculăm filtrul invers și îl aplicăm semnalului distorsionat.
+
+
+```matlab
+h = distort2([1 zeros(1,30)]);
+
+b = FIRinvers( ... );
+
+xrec = filter( ... );
+
+plot([x', xrec'])
+
+```
+
+## Implementare eficientă / identificare de sistem
+
+Descărcați și dezarhivați ecourile (reverb-urile) disponibile pe pagina [https://www.voxengo.com/impulses/](https://www.voxengo.com/impulses/)
+
+Încărcați unul dintre cele mai scurte (de ex. `Direct Cabinet N2.wav`) și aplicați-l asupra unei melodii.
+
+
+```matlab
+% Load impulse response, keep a single column, plot it
+[h, Fs2] = ...
+h = h(:, 1);
+plot(h)
+
+% Load signal, keep a single column
+...
+
+% Apply reverb = convolution between `x` and `h`
+y = ...
+```
+
+Să afișăm primele 200 eșantioane din `h`:
+
+
+```matlab
+plot(h(1:200))
+```
+
+### Problema
+
+Dacă lungimea lui $h$ este L, câte calcule se fac la aplicarea convoluției?
+
+- L înmulțiri pentru fiecare eșantion al iesirii $y$
+- sunt $F_s$ eșantioane pe secundă în $y$
+- total = 
+
+Dacă am reuși să exprimăm $h$ ca un răspuns la impuls al unui sistem IIR de gradul `ord`, 
+am putea implementa sistemul cu ecuația sistemului, care utilizează doar `2*ord +1` multiplicări.
+
+### Soluție
+
+Utilizăm metodele tip Prony pentru a găsi un sistem al cărui $h[n]$ aproximează $h_d$-ul dorit.
+
+Aproximați semnalul $h$ prin metoda Pade / Prony, încercând diverse valori ale lui `ord`.
+
+- rulați funcția și obțineți coeficienții `b` și `a`
+- având $b_k$ și $a_k$, calculați răspunsul la impuls obținut $h[n]$ pentru primele 44100 eșantioane cu `impz()`
+- afișați semnalele $h[n]$ (cel proiectat) și $h_d[n]$ (cel țintă) pe aceeași figură, pentru comparație
+- calculați eroarea dintre cele două semnale cu formula:
+  $$E = \sum_n (h[n] - h_d[n])^2$$
+
+
+```matlab
+% TODO: write here
+```
+
+O problemă importantă este că primele eșantioanele ale lui $h$ sunt foarte mici și irelevante, iar metodele Pade & Prony 
+aleg o parte din coeficienți pe baza acestora. 
+
+Se poate încerca eliminarea primelor eșantioane din semnalul $h$.
+
+
+
+## Exercițiu / Exemplu la tablă
+
+1. Folosiți metoda celor mai mici pătrate pentru a găsi filtrul FIR invers de ordinul 2 al filtrului:
+   $$H(z) = 0.2 + 0.8 z^{-1} + 0.2 z^{-2}$$ -->
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
