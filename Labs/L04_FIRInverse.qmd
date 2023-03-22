@@ -247,7 +247,7 @@ xrec = ...
 plot([x', xrec'])
 ``` -->
 
-## Obiectiv
+## Objective
 
 Using the least-squares design method for finding the FIR approximation of the inverse of a filter.
 
