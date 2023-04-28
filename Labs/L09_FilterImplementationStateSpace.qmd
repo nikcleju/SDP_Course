@@ -109,20 +109,18 @@ The definition of the general terms, according to type I or type II, is given in
 
 ## Practical exercises
 
-1. In the Matlab environment, use the `fdatool` tool to design a stopband filter of order 4, elliptic type,
-with stop band between 1kHz and 3kHz, at a sampling frequency of 44.1kHz. Export the coefficients in the Matlab workspace
-as the vectors `a` and `b`.
+1. In the Matlab environment, use the `fdatool` tool to design one of the following filters:
 
-4. In the Matlab environment, implement a function `filter_spst(b, a, x)` which filters a signal `x` with
-the filter defined by the coefficients `b` and `a`. Implementation shall follow the type I state-space equations.
+    a. A low-pass filter, IIR, order 4, elliptic type, with cutoff frequency of 5kHz for a sampling frequency of 44.1 kHZ;
+    a. A high-pass filter, IIR, order 4, elliptic type, with cutoff frequency of 1kHz for a sampling frequency of 44.1 kHZ;
+    a. A band-pass filter, IIR, order 4, elliptic type, with pass-band between 700Hz and 4kHz for a sampling frequency of 44.1 kHZ.
 
-5. Test the function written above with the coefficients designed at step 3, by filtering a sample audio signal.
+    Export the coefficients to Matlab's Workspace.
 
-
-6. Modify the function to perform temporal filtering of a video sequence, only for a filter of order 3.
+2. Fill in the following code template to perform temporal filtering of a video sequence, using the filter designed above.
    Test the function on the video sequence `veh_small.mp4`.
 
-   To read frames from a video sequence in Matlab, you can use the following snippet:
+   Use the state-space type I equations, but extend them to a system of order 4.
 
    ```
    v = VideoReader('videofile.mp4');
@@ -132,10 +130,31 @@ the filter defined by the coefficients `b` and `a`. Implementation shall follow 
    while hasFrame(v)
     frame = readFrame(v);
 
-	% Do the processing here
+	% Do the processing heres
+
+	% Output equation
+	y = ...
+
+	% State equation
+	v1_next = ...
+	v2_next = ...
+	v3_next = ...
+	v4_next = ...
+
+	% Update for next iteration
+	v1 = v1_next;
+	v2 = v2_next;
+	v3 = v3_next;
+	v4 = v4_next;
 
    end
    ```
+
+4. Implement a function `filter_spst(b, a, x)` which filters a signal `x` with
+the filter defined by the coefficients `b` and `a`. Implementation shall follow the type I state-space equations.
+
+5. Test the function written above with the coefficients designed at step 3, by filtering a sample audio signal.
+
 
 ## Final questions
 
