@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.3.326">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,7 +17,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -34,6 +34,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="L12_OverflowEffects_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="L12_OverflowEffects_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -46,13 +47,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#objective" id="toc-objective" class="nav-link active" data-scroll-target="#objective"><span class="toc-section-number">1</span>  Objective</a></li>
-  <li><a href="#theoretical-notions" id="toc-theoretical-notions" class="nav-link" data-scroll-target="#theoretical-notions"><span class="toc-section-number">2</span>  Theoretical notions</a></li>
-  <li><a href="#theoretical-exercises" id="toc-theoretical-exercises" class="nav-link" data-scroll-target="#theoretical-exercises"><span class="toc-section-number">3</span>  Theoretical exercises</a></li>
-  <li><a href="#practical-exercises" id="toc-practical-exercises" class="nav-link" data-scroll-target="#practical-exercises"><span class="toc-section-number">4</span>  Practical exercises</a></li>
-  <li><a href="#final-questions" id="toc-final-questions" class="nav-link" data-scroll-target="#final-questions"><span class="toc-section-number">5</span>  Final questions</a></li>
+  <li><a href="#objective" id="toc-objective" class="nav-link active" data-scroll-target="#objective"><span class="header-section-number">1</span> Objective</a></li>
+  <li><a href="#theoretical-notions" id="toc-theoretical-notions" class="nav-link" data-scroll-target="#theoretical-notions"><span class="header-section-number">2</span> Theoretical notions</a></li>
+  <li><a href="#theoretical-exercises" id="toc-theoretical-exercises" class="nav-link" data-scroll-target="#theoretical-exercises"><span class="header-section-number">3</span> Theoretical exercises</a></li>
+  <li><a href="#practical-exercises" id="toc-practical-exercises" class="nav-link" data-scroll-target="#practical-exercises"><span class="header-section-number">4</span> Practical exercises</a></li>
+  <li><a href="#final-questions" id="toc-final-questions" class="nav-link" data-scroll-target="#final-questions"><span class="header-section-number">5</span> Final questions</a></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="L12_OverflowEffects.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li><li><a href="L12_OverflowEffects.ipynb" download="L12_OverflowEffects.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -95,16 +96,30 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="4" class="anchored" data-anchor-id="practical-exercises"><span class="header-section-number">4</span> Practical exercises</h2>
 <ol type="1">
 <li><p>In Matlab, use the <code>fdatool</code> tool to design a low-pass IIR filter of order 4, Butterworth type, with cutoff frequency equal to 1.5kHz for a sampling frequency of 44.1kHz.</p>
-<p>Convert the filter to direct form II and export it to Simulink (check the option <em>Build model using basic elements</em>).</p></li>
-<li><p>In the Simulink model, make two copies of the filter (Copy/Paste). At the input of both filters put a sample audio signal (e.g.&nbsp;<em>Kalimba.mp3</em> or <em>mtlb</em>). For the second filter, the input signal shall be converted to fixed-point 1S2Î9F data type.</p>
 <ol type="a">
-<li>Obtain and plot the difference between the two outputs.</li>
-<li>Export the difference signal to Matlab’s Workspace and compute its average value and the dispersion.</li>
+<li>Export the filter to Simulink, in the Second-Order-Sections structure (“Export to Simulink model”, check option <em>Build model using basic elements</em>).</li>
+<li>Convert the filter to Direct Form II and export it again to Simulink (also check <em>Build model using basic elements</em>).</li>
 </ol></li>
-<li><p>Make a new copy of the second filter, and for this copy un-check in the properties of the <em>Sum</em> blocks the option <em>Saturate on integer overflow</em>.</p>
+<li><p>In the Simulink model, make two copies of the filter in Direct-Form II (Copy/Paste).</p>
+<p>At the input of both filters put a sample audio signal (e.g.&nbsp;<em>Kalimba.mp3</em>). For the block “From Multimedia File”, set the parameter “Number of samples per audio channel” (1024) <strong>to 1</strong>.</p>
+<p>Display the signal types: right-click in white area -&gt; “Other Displays” -&gt; “Signal and Ports” -&gt; “Port Data Types”</p>
 <ol type="a">
-<li>What is its effect? Obtain and plot the difference compared to the first filter.</li>
-<li>Which of the filters 2 or 3 produces smaller errors?</li>
+<li><p>For the second filter, convert the input signal to fixed-point 1S2I9F data type, using a “Data Type Conversion” block.</p></li>
+<li><p>Obtain and plot the difference between the two outputs;</p></li>
+<li><p>Increase the number of bits for the integer part, until obtaining an output signal close to the original;</p></li>
+<li><p>Export the difference signal to Matlab’s Workspace and compute its average value and the variance.</p>
+<p>Use a “To Workspace” block, and change settings:</p>
+<ul>
+<li>Save format: Array</li>
+<li>2D instead of 3D</li>
+</ul></li>
+</ol></li>
+<li><p>Repeat exercise 2 for the filter implemented with Second-Order-Systems.</p></li>
+<li><p>Repeat exercise 2, returning to the format 1S6I9F.</p>
+<p>For the second filter, uncheck for all the <em>Sum</em> and <em>Gain</em> blocks the option <em>Saturate on integer overflow</em>.</p>
+<ol type="a">
+<li>What is the effect? Obtain and plot the difference between the two outputs;</li>
+<li>In which case are the errors smaller? (with option checked or not).</li>
 </ol></li>
 <li><p>Use the function <code>normescal()</code> to compute different scaling norms for the given filter. Scale the input signal with each one of these norms, and rescale back the output. What is the effect of this procedure?</p></li>
 </ol>
@@ -145,9 +160,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -212,6 +241,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {

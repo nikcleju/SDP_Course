@@ -42,23 +42,33 @@ events on the output of a digital filter.
 of order 4, Butterworth type, with cutoff frequency equal to 1.5kHz for
 a sampling frequency of 44.1kHz.
 
-   Convert the filter to direct form II
-   and export it to Simulink (check the option *Build model using basic elements*).
+   a. Export the filter to Simulink, in the Second-Order-Sections structure ("Export to Simulink model", check option *Build model using basic elements*).
+   b. Convert the filter to Direct Form II and export it again to Simulink (also check *Build model using basic elements*).
 
-2. In the Simulink model, make two copies of the filter (Copy/Paste).
-At the input of both filters put a sample audio signal (e.g. *Kalimba.mp3* or *mtlb*).
-For the second filter, the input signal shall be converted to fixed-point
-1S2Î9F data type.
+2. In the Simulink model, make two copies of the filter in Direct-Form II (Copy/Paste).
 
-   a. Obtain and plot the difference between the two outputs.
-   b. Export the difference signal to Matlab's Workspace and compute its average value
-   and the dispersion.
+   At the input of both filters put a sample audio signal (e.g. *Kalimba.mp3*).
+   For the block "From Multimedia File", set the parameter "Number of samples per audio channel" (1024) **to 1**.
 
-3. Make a new copy of the second filter, and for this copy un-check
-in the properties of the *Sum* blocks the option *Saturate on integer overflow*.
+   Display the signal types: right-click in white area -> "Other Displays" -> "Signal and Ports" -> "Port Data Types"
+   
+   a. For the second filter, convert the input signal to fixed-point 1S2I9F data type, using a "Data Type Conversion" block.
+   a. Obtain and plot the difference between the two outputs;
+   c. Increase the number of bits for the integer part, until obtaining an output signal close to the original;
+   b. Export the difference signal to Matlab's Workspace and compute its average value and the variance.
 
-   a. What is its effect? Obtain and plot the difference compared to the first filter.
-   b. Which of the filters 2 or 3 produces smaller errors?
+      Use a "To Workspace" block, and change settings: 
+	  - Save format: Array
+	  - 2D instead of 3D
+
+3. Repeat exercise 2 for the filter implemented with Second-Order-Systems.
+
+3. Repeat exercise 2, returning to the format 1S6I9F.
+   
+   For the second filter, uncheck for all the *Sum* and *Gain* blocks the option *Saturate on integer overflow*.
+
+   a. What is the effect? Obtain and plot the difference between the two outputs;
+   b. In which case are the errors smaller? (with option checked or not).
 
 4. Use the function `normescal()` to compute different scaling norms
 for the given filter. Scale the input signal with each one of these norms,
