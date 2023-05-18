@@ -48,7 +48,7 @@ a sampling frequency of 44.1kHz.
 2. In the Simulink model, make two copies of the filter in Direct-Form II (Copy/Paste).
 
    At the input of both filters put a sample audio signal (e.g. *Kalimba.mp3*).
-   For the block "From Multimedia File", set the parameter "Number of samples per audio channel" (1024) **to 1**.
+   For the block "From Multimedia File", set the parameter "Samples per audio channel" (1024) **to 1**.
 
    Display the signal types: right-click in white area -> "Other Displays" -> "Signal and Ports" -> "Port Data Types"
    
