@@ -104,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
 <p>At the input of both filters put a sample audio signal (e.g.&nbsp;<em>Kalimba.mp3</em>). For the block “From Multimedia File”, set the parameter “Samples per audio channel” (1024) <strong>to 1</strong>.</p>
 <p>Display the signal types: right-click in white area -&gt; “Other Displays” -&gt; “Signal and Ports” -&gt; “Port Data Types”</p>
 <ol type="a">
-<li><p>For the second filter, convert the input signal to fixed-point 1S2I9F data type, using a “Data Type Conversion” block.</p></li>
+<li><p>For the second filter, convert the input signal to fixed-point 1S6I9F data type, using a “Data Type Conversion” block.</p></li>
 <li><p>Increase the number of bits for the integer part, until obtaining an output signal close to the original;</p></li>
 <li><p>Obtain and plot the difference between the two outputs;</p></li>
 <li><p>Export the difference signal to Matlab’s Workspace and compute its average value and the variance.</p>

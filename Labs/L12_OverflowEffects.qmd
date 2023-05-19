@@ -52,7 +52,7 @@ a sampling frequency of 44.1kHz.
 
    Display the signal types: right-click in white area -> "Other Displays" -> "Signal and Ports" -> "Port Data Types"
    
-   a. For the second filter, convert the input signal to fixed-point 1S2I9F data type, using a "Data Type Conversion" block.
+   a. For the second filter, convert the input signal to fixed-point 1S6I9F data type, using a "Data Type Conversion" block.
    b. Increase the number of bits for the integer part, until obtaining an output signal close to the original;
    c. Obtain and plot the difference between the two outputs;
    d. Export the difference signal to Matlab's Workspace and compute its average value and the variance.
