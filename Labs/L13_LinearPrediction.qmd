@@ -80,12 +80,13 @@ a = lpc(x, order);
 ### Prediction using the LPC coefficients
 
 ```matlab
-x = 1:1:10
+x = 1:1:500
 order = 5;
 a = lpc(x, order);
 
 % Predict value at n=11 and append to x:
-x(11) = sum(x(n-1:-1:n-ordin) .* (-a(2:end)))
+n=501;
+x(n) = sum( x(n-1:-1:n-order) .* (-a(2:end))   )
 ```
 
 ## Theoretical exercises
@@ -104,54 +105,50 @@ x(11) = sum(x(n-1:-1:n-ordin) .* (-a(2:end)))
 
 ## Practical exercises
 
-1. Predicție liniară pe un semnal liniar
+1. Linear prediction of a linear signal
   
-   - Generați un semnal liniar crescător de 200 eșantioane, cu pantă constantă $\Delta = 0.5$, prima valoare fiind 5.
+   - Generate a linearly increasing signal with 200 samples, with constant slope $\Delta = 0.5$, starting from 5.
     
-	 Folosiți `linspace()` sau `start:step:stop`.
+	 Use `linspace()` or `start:step:stop`.
 	
-   - Modelăm semnalul ca un proces autoregresiv de ordin 4, AR(4).
-    Calculați coeficienții de predicție $a_k$ cu funcția Matlab `lpc()`.
+   - Model the signal as an autoregressive AR(4) process.
+     Compute the prediction coefficients $a_k$ using the Matkab function `lpc()`.
 	
-   - Pe baza coeficienților de predicție, folosind relația de predicție,
-     preziceți următoarele 200 eșantioane ale semnalului.
-	 Afișați întregul semnal rezultat (400 eșantioane)
+   - Based on the prediction coefficients, using the prediction relation, 
+     predict the next 200 samples of the signal and append them.
+	 
+	 Plot the full resulting signal (400 samples).
      
-     Puteți folosi o relație de forma `sum(x(n-1:-1:n-ordin) .* (-a(2:end)))`
+     Use the relation: `sum(x(n-1:-1:n-ordin) .* (-a(2:end)))`
 
-   - Utilizați funcția `lpc_exact()` în locul `lpc()`. Ce se observă ?
-   	
-   - Generați același semnal crescător cu lungime 400 eșantioane direct cu formula initială.
-     Afișați pe aceeași figură semnalul acesta și semnalul precedent (2 x 400 eșantioane).
-	
-	 Ce calitate are porțiunea prezisă, comparativ?
+   - Use the function `lpc_exact()` instead of `lpc()`. Is it better ?
+   	  
+   - Change the AR order to AR(1), AR(2), AR(3), AR(10). What happens?
   
-   - Schimbați ordinul modelului în AR(1), AR(2), AR(3), AR(10. Ce se observă ?
-  
-     Care este cel mai mic ordin pentru care predicția reușește?
+     What is the minimum order for which the prediction succeeds?
 	
 
-1. Predicție liniară pe diverse semnale.
+1. Linear prediction on various signals.
 
-   Repetați ex. precedent pentru un semnal de forma:
+   Repeat the exercise above for the following singals:
      
-   - Semnal exponențial: $x[n] = (0.9)^n u[n]$. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.
+   - Exponential signal: $x[n] = (0.9)^n u[n]$. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.
    
-   - Semnal sinusoidal: $x[n] = 3 \cdot \sin( 2 * \pi * f * n) u[n], f = 0.05$. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.
+   - Sinusoidal signal: $x[n] = 3 \cdot \sin( 2 * \pi * f * n) u[n], f = 0.05$. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.
    
-   - Sinusoidă exponențială: $x[n] = 0.8^n \cdot \sin( 2 * \pi * f * n) u[n], f = 0.2$. Lungime 50 + 50
+   - Exponential sinusoidal: $x[n] = 0.8^n \cdot \sin( 2 * \pi * f * n) u[n], f = 0.2$. Lungime 50 + 50
 
-   - Semnal sinusoidal atenuat: $x[n] = \frac{\sin( 2 * \pi * f * n)}{2*\pi*f*n}  u[n], f = 0.05$. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.
+   - Damped sinusoidal signal: $x[n] = \frac{\sin( 2 * \pi * f * n)}{2*\pi*f*n}  u[n], f = 0.05$. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.
 
-   - Semnal de tip zgomot alb gaussian (AWGN, generat cu `randn()`). $x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2$. Lungime 500 + 100. Apoi lungime 20 + 100. 
+   - Gaussian white noise (AWGN, generated with `randn()`). $x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2$. Lungime 500 + 100. Apoi lungime 20 + 100. 
    
-   - Semnal de tip zgomot alb uniform (generat cu `rand()`). $x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2$. Lungime 500 + 100. Apoi lungime 20 + 100. 
+   - Uniform white noise (use `rand()`). $x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2$. Lungime 500 + 100. Apoi lungime 20 + 100. 
 
-   - Semnal sinusoidal in zgomot alb: $x[n] = 2 \cdot sin( 2 * \pi * f * n) u[n] + AWGN, f = 0.05$. Lungime 100 + 100.
+   - Sinusoidal + white noise: $x[n] = 2 \cdot sin( 2 * \pi * f * n) u[n] + AWGN, f = 0.05$. Lungime 100 + 100.
 
-   - Semnalul `mtlb` încărcat cu `load mtlb;`. Estimați următoarea secundă de semnal audio.   
+   - The `mtlb` signal. Estimate the next second of audio signal.
    
-   - Primele 150 de eșantioane din semnalul `mtlb`. Estimați următoarea secundă de semnal audio.   
+   - The first 150 samples from `mtlb`. Estimate the next second of audio signal.
 
 3. Reducerea zgomotului prin predicție.
 

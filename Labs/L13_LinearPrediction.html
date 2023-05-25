@@ -155,12 +155,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="prediction-using-the-lpc-coefficients" class="level3">
 <h3 class="anchored" data-anchor-id="prediction-using-the-lpc-coefficients">Prediction using the LPC coefficients</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="va">order</span> <span class="op">=</span> <span class="fl">5</span><span class="op">;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="va">a</span> <span class="op">=</span> <span class="va">lpc</span>(<span class="va">x</span><span class="op">,</span> <span class="va">order</span>)<span class="op">;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">% Predict value at n=11 and append to x:</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="va">x</span>(<span class="fl">11</span>) <span class="op">=</span> <span class="va">sum</span>(<span class="va">x</span>(<span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">:-</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">-</span><span class="va">ordin</span>) <span class="op">.*</span> (<span class="op">-</span><span class="va">a</span>(<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="va">n</span><span class="op">=</span><span class="fl">501</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="va">x</span>(<span class="va">n</span>) <span class="op">=</span> <span class="va">sum</span>( <span class="va">x</span>(<span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">:-</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">-</span><span class="va">order</span>) <span class="op">.*</span> (<span class="op">-</span><span class="va">a</span>(<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>))   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="theoretical-exercises" class="level2" data-number="4">
@@ -179,31 +180,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="practical-exercises" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="practical-exercises"><span class="header-section-number">5</span> Practical exercises</h2>
 <ol type="1">
-<li><p>Predicție liniară pe un semnal liniar</p>
+<li><p>Linear prediction of a linear signal</p>
 <ul>
-<li><p>Generați un semnal liniar crescător de 200 eșantioane, cu pantă constantă <span class="math inline">\(\Delta = 0.5\)</span>, prima valoare fiind 5.</p>
-<p>Folosiți <code>linspace()</code> sau <code>start:step:stop</code>.</p></li>
-<li><p>Modelăm semnalul ca un proces autoregresiv de ordin 4, AR(4). Calculați coeficienții de predicție <span class="math inline">\(a_k\)</span> cu funcția Matlab <code>lpc()</code>.</p></li>
-<li><p>Pe baza coeficienților de predicție, folosind relația de predicție, preziceți următoarele 200 eșantioane ale semnalului. Afișați întregul semnal rezultat (400 eșantioane)</p>
-<p>Puteți folosi o relație de forma <code>sum(x(n-1:-1:n-ordin) .* (-a(2:end)))</code></p></li>
-<li><p>Utilizați funcția <code>lpc_exact()</code> în locul <code>lpc()</code>. Ce se observă ?</p></li>
-<li><p>Generați același semnal crescător cu lungime 400 eșantioane direct cu formula initială. Afișați pe aceeași figură semnalul acesta și semnalul precedent (2 x 400 eșantioane).</p>
-<p>Ce calitate are porțiunea prezisă, comparativ?</p></li>
-<li><p>Schimbați ordinul modelului în AR(1), AR(2), AR(3), AR(10. Ce se observă ?</p>
-<p>Care este cel mai mic ordin pentru care predicția reușește?</p></li>
+<li><p>Generate a linearly increasing signal with 200 samples, with constant slope <span class="math inline">\(\Delta = 0.5\)</span>, starting from 5.</p>
+<p>Use <code>linspace()</code> or <code>start:step:stop</code>.</p></li>
+<li><p>Model the signal as an autoregressive AR(4) process. Compute the prediction coefficients <span class="math inline">\(a_k\)</span> using the Matkab function <code>lpc()</code>.</p></li>
+<li><p>Based on the prediction coefficients, using the prediction relation, predict the next 200 samples of the signal and append them.</p>
+<p>Plot the full resulting signal (400 samples).</p>
+<p>Use the relation: <code>sum(x(n-1:-1:n-ordin) .* (-a(2:end)))</code></p></li>
+<li><p>Use the function <code>lpc_exact()</code> instead of <code>lpc()</code>. Is it better ?</p></li>
+<li><p>Change the AR order to AR(1), AR(2), AR(3), AR(10). What happens?</p>
+<p>What is the minimum order for which the prediction succeeds?</p></li>
 </ul></li>
-<li><p>Predicție liniară pe diverse semnale.</p>
-<p>Repetați ex. precedent pentru un semnal de forma:</p>
+<li><p>Linear prediction on various signals.</p>
+<p>Repeat the exercise above for the following singals:</p>
 <ul>
-<li><p>Semnal exponențial: <span class="math inline">\(x[n] = (0.9)^n u[n]\)</span>. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.</p></li>
-<li><p>Semnal sinusoidal: <span class="math inline">\(x[n] = 3 \cdot \sin( 2 * \pi * f * n) u[n], f = 0.05\)</span>. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.</p></li>
-<li><p>Sinusoidă exponențială: <span class="math inline">\(x[n] = 0.8^n \cdot \sin( 2 * \pi * f * n) u[n], f = 0.2\)</span>. Lungime 50 + 50</p></li>
-<li><p>Semnal sinusoidal atenuat: <span class="math inline">\(x[n] = \frac{\sin( 2 * \pi * f * n)}{2*\pi*f*n} u[n], f = 0.05\)</span>. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.</p></li>
-<li><p>Semnal de tip zgomot alb gaussian (AWGN, generat cu <code>randn()</code>). <span class="math inline">\(x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2\)</span>. Lungime 500 + 100. Apoi lungime 20 + 100.</p></li>
-<li><p>Semnal de tip zgomot alb uniform (generat cu <code>rand()</code>). <span class="math inline">\(x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2\)</span>. Lungime 500 + 100. Apoi lungime 20 + 100.</p></li>
-<li><p>Semnal sinusoidal in zgomot alb: <span class="math inline">\(x[n] = 2 \cdot sin( 2 * \pi * f * n) u[n] + AWGN, f = 0.05\)</span>. Lungime 100 + 100.</p></li>
-<li><p>Semnalul <code>mtlb</code> încărcat cu <code>load mtlb;</code>. Estimați următoarea secundă de semnal audio.</p></li>
-<li><p>Primele 150 de eșantioane din semnalul <code>mtlb</code>. Estimați următoarea secundă de semnal audio.</p></li>
+<li><p>Exponential signal: <span class="math inline">\(x[n] = (0.9)^n u[n]\)</span>. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.</p></li>
+<li><p>Sinusoidal signal: <span class="math inline">\(x[n] = 3 \cdot \sin( 2 * \pi * f * n) u[n], f = 0.05\)</span>. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.</p></li>
+<li><p>Exponential sinusoidal: <span class="math inline">\(x[n] = 0.8^n \cdot \sin( 2 * \pi * f * n) u[n], f = 0.2\)</span>. Lungime 50 + 50</p></li>
+<li><p>Damped sinusoidal signal: <span class="math inline">\(x[n] = \frac{\sin( 2 * \pi * f * n)}{2*\pi*f*n} u[n], f = 0.05\)</span>. Porniți de la un semnal de lungime 50, și estimați următoarele 50 eșantioane.</p></li>
+<li><p>Gaussian white noise (AWGN, generated with <code>randn()</code>). <span class="math inline">\(x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2\)</span>. Lungime 500 + 100. Apoi lungime 20 + 100.</p></li>
+<li><p>Uniform white noise (use <code>rand()</code>). <span class="math inline">\(x[n] = 0.8^n \cdot sin( 2 * \pi * f * n) u[n], f = 0.2\)</span>. Lungime 500 + 100. Apoi lungime 20 + 100.</p></li>
+<li><p>Sinusoidal + white noise: <span class="math inline">\(x[n] = 2 \cdot sin( 2 * \pi * f * n) u[n] + AWGN, f = 0.05\)</span>. Lungime 100 + 100.</p></li>
+<li><p>The <code>mtlb</code> signal. Estimate the next second of audio signal.</p></li>
+<li><p>The first 150 samples from <code>mtlb</code>. Estimate the next second of audio signal.</p></li>
 </ul></li>
 <li><p>Reducerea zgomotului prin predicție.</p>
 <p>Generați un semnal de forma:</p>
