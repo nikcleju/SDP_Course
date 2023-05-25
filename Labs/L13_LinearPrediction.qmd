@@ -57,7 +57,7 @@ Exponential signal $a^n u[n]$:
 
 ```matlab
 n = 0:20;
-x = (1/2).^m;
+x = (1/2).^n;
 plot(x)
 ```
 
@@ -107,7 +107,7 @@ x(n) = sum( x(n-1:-1:n-order) .* (-a(2:end))   )
 
 1. Linear prediction of a linear signal
   
-   - Generate a linearly increasing signal with 200 samples, with constant slope $\Delta = 0.5$, starting from 5.
+   - Generate a linearly increasing signal with 200 samples, with constant step $\Delta = 0.5$, starting from 5.
     
 	 Use `linspace()` or `start:step:stop`.
 	

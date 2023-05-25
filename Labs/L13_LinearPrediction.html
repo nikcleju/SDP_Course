@@ -141,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">plot</span>(<span class="va">x</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Exponential signal <span class="math inline">\(a^n u[n]\)</span>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">n</span> <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span><span class="op">;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="op">=</span> (<span class="fl">1</span><span class="op">/</span><span class="fl">2</span>)<span class="op">.^</span><span class="va">m</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="op">=</span> (<span class="fl">1</span><span class="op">/</span><span class="fl">2</span>)<span class="op">.^</span><span class="va">n</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">plot</span>(<span class="va">x</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Noise:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="op">=</span> <span class="va">randn</span>(<span class="fl">1</span><span class="op">,</span><span class="fl">100</span>)<span class="op">;</span>   <span class="co">% or use rand()</span></span>
@@ -182,7 +182,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p>Linear prediction of a linear signal</p>
 <ul>
-<li><p>Generate a linearly increasing signal with 200 samples, with constant slope <span class="math inline">\(\Delta = 0.5\)</span>, starting from 5.</p>
+<li><p>Generate a linearly increasing signal with 200 samples, with constant step <span class="math inline">\(\Delta = 0.5\)</span>, starting from 5.</p>
 <p>Use <code>linspace()</code> or <code>start:step:stop</code>.</p></li>
 <li><p>Model the signal as an autoregressive AR(4) process. Compute the prediction coefficients <span class="math inline">\(a_k\)</span> using the Matkab function <code>lpc()</code>.</p></li>
 <li><p>Based on the prediction coefficients, using the prediction relation, predict the next 200 samples of the signal and append them.</p>
